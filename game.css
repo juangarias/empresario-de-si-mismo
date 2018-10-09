@@ -366,13 +366,12 @@ p.texto_avatar{
 
 /***** FIN AVATAR MENU *****/
 
-#gameover{
+#gameover, #youWin {
     background-color: rgba(0,0,0,0.7);
     position: absolute;
     width: 544px;
     height: 120px;
     top:100px;
-
 }
 
 p.texto_gameover{
