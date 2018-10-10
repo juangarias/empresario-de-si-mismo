@@ -5,11 +5,12 @@
 
 // Tiempos para DEBUG / DEVELOPMENT
 const TIEMPO_TOTAL_JUEGO = 20000; 
-const TIEMPO_ACCION = 3000; 
-const TIEMPO_CAMBIO_ACCION = 1500;
+const TIEMPO_ACCION = 1000; 
+const TIEMPO_CAMBIO_ACCION = 5000;
 
 
-var ansiedad, felicidad, miedo, energia, hambre, dinero, energia, vidas, tiempo, timer, tiempoAccion, tiempoCambioAccion, energyFlag;
+var ansiedad, felicidad, miedo, energia, hambre, dinero, energia, vidas, tiempo, tiempoAccion, tiempoCambioAccion, energyFlag;
+var timer, timerAccion, timerCambioAccion;
 
 $(document).ready(function() {
    energiaInit     = 35;
@@ -63,9 +64,7 @@ var startGame = function(avatarAudio) {
       if (seconds < 10) {seconds = "0"+seconds}
 
       $("#tiempo p.reloj").text(minutes+':'+seconds);
-      if (minutes == 0 && seconds < 5 && seconds >0) {
-        playSound("countdown_audio");
-      }
+
       if (minutes == 0 && seconds == 0) {
         gameOver();
       }
@@ -76,20 +75,33 @@ var startGame = function(avatarAudio) {
 };
 
 var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew, audio) {
-  $("#actionsmenu").hide();
+  clearInterval(timerAccion);
+  clearInterval(timerCambioAccion);
+  $("#cambiar_escena_button").hide();
   playSound(audio);
+  $("#actionsmenu").hide();
   setActionTimer();
   updateInfo(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
 };
 
-var gameOver = function() {
 
+var changeAction = function() {
+  $("#actionsmenu").show();
+  $("#userdata_container").show();
+  $("#gameover").hide();
+  $("#startscreen").hide();
+};
+
+
+var gameOver = function() {
+  
   if (energyFlag) {
     playSound("gameover_audio");
     $("#gameover").show();
   } else {
     $("#youWin").show();
   }
+
   $("#avatarsmenu").hide();
   $("#actionsmenu").hide();
   $("#cambiar_escena_button").hide();
@@ -97,13 +109,12 @@ var gameOver = function() {
   clearInterval(timerAccion);
   clearInterval(timerCambioAccion)
 
-  setTimeout(function() {
-    resetGame();
-  }, 5000);
+  setTimeout(resetGame, 5000);
 };
 
 var setActionTimer = function() {
   tiempoAccion = TIEMPO_ACCION;
+
   timerAccion = setInterval(function() {
     if (tiempoAccion <= 0) {
         clearInterval(timerAccion);
@@ -125,16 +136,18 @@ var setChangeActionTimer = function() {
 
   timerCambioAccion = setInterval(function() {
     if (tiempoCambioAccion > 0) {
-      var minutes = Math.floor((tiempoCambioAccion % (1000 * 60 * 60)) / (1000 * 60));
       var seconds = Math.floor((tiempoCambioAccion % (1000 * 60)) / 1000);
+      if (seconds <= 5 && seconds > 0) {
+        playSound("countdown_audio");
+      }
       if (seconds < 10) {
         seconds = "0"+seconds;
       }
-
     } else {
-      clearInterval(timerCambioAccion);
+      energyFlag = true;
       gameOver();
     }
+
     $("#cambiar_escena_button p.texto_cambiar_escena").text('CAMBIAR ACCION:'+' '+seconds);
     tiempoCambioAccion-=1000;
   }, 1000);
@@ -186,16 +199,6 @@ var showMainScreen = function() {
   $("#startscreen").show();
 };
 
-var changeAction = function() {
-  $("#actionsmenu").show();
-  $("#userdata_container").show();
-  $("#gameover").hide();
-  $("#cambiar_escena_button").hide();
-  $("#startscreen").hide();
-  clearInterval(timerCambioAccion);
-};
-
-
 /*
  * FUNCION PARA ACTUALIZAR VIDAS EN CASO DE CAMBIO DE PARECER.
  * SE DEBE LLAMAR EN EL CLICK DE LAS ACCIONES(COMER; DORMIR; ETC)
@@ -210,7 +213,7 @@ var updateLives = function() {
   //console.log(vidas*27);
 };
 
-var updateInfo = function (ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew) {
+var updateInfo = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew) {
 
   // Primero actualizamos el valor de cada item.
   ansiedad += ansiedadNew * 7;
@@ -263,13 +266,10 @@ var updateInfo = function (ansiedadNew, felicidadNew, miedoNew, energiaNew, hamb
   console.log(ansiedad+", "+felicidad+", "+miedo+", "+energia+", "+hambre+", "+dinero);
 
   //Ahora lo actualizamos en los estilos
-
   $("#ansiedad").width(ansiedad + "px");
   $("#felicidad").width(felicidad + "px");
   $("#miedo").width(miedo + "px");
   $("#energia").width(energia + "px");
   $("#hambre").width(hambre + "px");
   $("#dinero").width(dinero + "px");
-
-
 };
