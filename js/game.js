@@ -99,9 +99,7 @@ var gameOver = function() {
     playSound("gameover_audio");
     $("#gameover").show();
   } else {
-    $("#youWin").show();
-    $("#sky").show();
-    animate("#sky");
+    showWinnerMessage();
   }
 
   $("#avatarsmenu").hide();
@@ -198,8 +196,16 @@ var showMainScreen = function() {
   $("#youWin").hide();
   $("#gameover").hide();
   $("#cambiar_escena_button").hide();
-  $("#startscreen").show();
   $("#sky").hide();
+  $("#startscreen").show();
+  $("#video").show();
+};
+
+var showWinnerMessage = function() {
+  $("#video").hide();
+  $("#youWin").show();
+  $("#sky").show();
+  animate("#sky");
 };
 
 /*
