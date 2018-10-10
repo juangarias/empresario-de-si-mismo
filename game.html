@@ -2,9 +2,10 @@
 <html lang="en">
     <head>
         <meta charset="utf-8" />
-        <link href="fonts/google-font-VT323.css" rel="stylesheet">
-        <link href="fonts/google-font-PressStart2P.css" rel="stylesheet">
-        <link rel="stylesheet" type="text/css" href="game.css">
+        <link rel="stylesheet" href="fonts/google-font-VT323.css">
+        <link rel="stylesheet" href="fonts/google-font-PressStart2P.css">
+        <link rel="stylesheet" type="text/css" href="css/game.css">
+        <link rel="stylesheet" type="text/css" href="css/fireworks.css">
     </head>
     
     <body>
@@ -26,7 +27,9 @@
       <audio id="sexo_audio" src="assets/sexo_m.mp3" autostart="false" ></audio>
       <audio id="votar_audio" src="assets/votar_m.mp3" autostart="false" ></audio>
       <audio id="belleza_audio" src="assets/belleza_m.mp3" autostart="false" ></audio>
+      
       <div id="sarasa" >
+        <canvas id="sky" width="640" height="480"></canvas>
         <div id="screen">
           <div id="video">
             <iframe id="feed" scrolling="no" src="http://localhost:8081/browserfs.html" frameborder="0"></iframe>
@@ -78,9 +81,9 @@
         </div>
       </div>
 
-      <script src="js/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
-
-      <script src="js/game.js"></script>
+      <script type="text/javascript" src="js/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
+      <script type="text/javascript" src="js/fireworks.js"></script>
+      <script type="text/javascript" src="js/game.js"></script>
 
     </body>
 </html>

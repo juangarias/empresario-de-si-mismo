@@ -100,6 +100,8 @@ var gameOver = function() {
     $("#gameover").show();
   } else {
     $("#youWin").show();
+    $("#sky").show();
+    animate("#sky");
   }
 
   $("#avatarsmenu").hide();
@@ -197,6 +199,7 @@ var showMainScreen = function() {
   $("#gameover").hide();
   $("#cambiar_escena_button").hide();
   $("#startscreen").show();
+  $("#sky").hide();
 };
 
 /*
