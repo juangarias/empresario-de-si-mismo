@@ -25,10 +25,37 @@ $(document).ready(function() {
 });
 
 $("#start_button").click(function() {
-  tiempo = TIEMPO_TOTAL_JUEGO; 
   $("#startscreen").hide();
   $("#avatarsmenu").show();
+  $(this).disabled;
+});
+
+$("#fitness").click(function() {startGame("fitness_audio")});
+$("#payasa").click(function() {startGame("payasa_audio")});
+$("#maga").click(function() {startGame("maga_audio")});
+$("#vikinga").click(function() {startGame("vikinga_audio")});
+$("#empresaria").click(function() {startGame("empresaria_audio")});
+$("#hiphop").click(function() {startGame("hiphop_audio")});
+
+$("#comer").click(function(){ triggerAction(-2,3,-1,4,4,2, "comer_audio");});
+$("#dormir").click(function(){ triggerAction(-3,2,-1,3,3,-1, "dormir_audio");});
+$("#trabajar").click(function(){ triggerAction(2,-2,1,-3,3,4, "trabajar_audio");});
+$("#ocio").click(function(){ triggerAction(-1,3,-1,1,2,-2, "ocio_audio");});
+$("#entrenar").click(function(){ triggerAction(-2,1,-1,-3,3,-2, "entrenar_audio");});
+$("#sexo").click(function(){ triggerAction(-2,3,-1,-2,3,-1, "sexo_audio");});
+$("#votar").click(function(){ triggerAction(3,1,2,-1,1,0, "votar_audio");});
+$("#belleza").click(function(){ triggerAction(-1,2,1,0,1,-4, "belleza_audio");});
+
+$("#cambiar_escena_button").click(function() {changeAction();});
+
+var startGame = function(avatarAudio) {
+  playSound(avatarAudio);
+  $("#avatarsmenu").hide();
+  $("#actionsmenu").show();
   $("#userdata_container").show();
+
+  tiempo = TIEMPO_TOTAL_JUEGO; 
+  
   timer = setInterval(function() {
     if (tiempo >= 0) {
       var minutes = Math.floor((tiempo % (1000 * 60 * 60)) / (1000 * 60));
@@ -46,57 +73,7 @@ $("#start_button").click(function() {
     }
     tiempo-=1000;
   }, 1000);
-
-  $(this).disabled;
-});
-
-$("#fitness").click(function() {
-  playSound("fitness_audio");
-  $("#avatarsmenu").hide();
-  $("#actionsmenu").show();
-});
-
-$("#payasa").click(function() {
-  playSound("payasa_audio");
-  $("#avatarsmenu").hide();
-  $("#actionsmenu").show();
-});
-
-$("#maga").click(function() {
-  playSound("maga_audio");
-  $("#avatarsmenu").hide();
-  $("#actionsmenu").show();
-});
-
-$("#vikinga").click(function() {
-  playSound("vikinga_audio");
-  $("#avatarsmenu").hide();
-  $("#actionsmenu").show();
-});
-
-$("#empresaria").click(function() {
-  playSound("empresaria_audio");
-  $("#avatarsmenu").hide();
-  $("#actionsmenu").show();
-});
-
-$("#hiphop").click(function() {
-  playSound("hiphop_audio");
-  $("#avatarsmenu").hide();
-  $("#actionsmenu").show();
-});
-
-$("#comer").click(function(){ triggerAction(-2,3,-1,4,4,2, "comer_audio");});
-$("#dormir").click(function(){ triggerAction(-3,2,-1,3,3,-1, "dormir_audio");});
-$("#trabajar").click(function(){ triggerAction(2,-2,1,-3,3,4, "trabajar_audio");});
-$("#ocio").click(function(){ triggerAction(-1,3,-1,1,2,-2, "ocio_audio");});
-$("#entrenar").click(function(){ triggerAction(-2,1,-1,-3,3,-2, "entrenar_audio");});
-$("#sexo").click(function(){ triggerAction(-2,3,-1,-2,3,-1, "sexo_audio");});
-$("#votar").click(function(){ triggerAction(3,1,2,-1,1,0, "votar_audio");});
-$("#belleza").click(function(){ triggerAction(-1,2,1,0,1,-4, "belleza_audio");});
-
-
-$("#cambiar_escena_button").click(function() {changeAction();});
+};
 
 var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew, audio) {
   $("#actionsmenu").hide();
