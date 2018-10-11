@@ -43,23 +43,45 @@ $("#vikinga").click(function() {startGame("vikinga_audio")});
 $("#empresaria").click(function() {startGame("empresaria_audio")});
 $("#hiphop").click(function() {startGame("hiphop_audio")});
 
-$("#comer").click(function(){ triggerAction(-2,3,-1,4,4,2, "comer_audio");});
-$("#dormir").click(function(){ triggerAction(-3,2,-1,3,3,-1, "dormir_audio");});
-$("#trabajar").click(function(){ triggerAction(2,-2,1,-3,3,4, "trabajar_audio");});
-$("#ocio").click(function(){ triggerAction(-1,3,-1,1,2,-2, "ocio_audio");});
-$("#entrenar").click(function(){ triggerAction(-2,1,-1,-3,3,-2, "entrenar_audio");});
-$("#sexo").click(function(){ triggerAction(-2,3,-1,-2,3,-1, "sexo_audio");});
-$("#votar").click(function(){ triggerAction(3,1,2,-1,1,0, "votar_audio");});
-$("#belleza").click(function(){ triggerAction(-1,2,1,0,1,-4, "belleza_audio");});
+$(".comer").click(function(){ triggerAction(-2,3,-1,4,4,2, "comer_audio");});
+$(".dormir").click(function(){ triggerAction(-3,2,-1,3,3,-1, "dormir_audio");});
+$(".trabajar").click(function(){ triggerAction(2,-2,1,-3,3,4, "trabajar_audio");});
+$(".ocio").click(function(){ triggerAction(-1,3,-1,1,2,-2, "ocio_audio");});
+$(".entrenar").click(function(){ triggerAction(-2,1,-1,-3,3,-2, "entrenar_audio");});
+$(".sexo").click(function(){ triggerAction(-2,3,-1,-2,3,-1, "sexo_audio");});
+$(".votar").click(function(){ triggerAction(3,1,2,-1,1,0, "votar_audio");});
+$(".belleza").click(function(){ triggerAction(-1,2,1,0,1,-4, "belleza_audio");});
 
 $("#cambiar_escena_button").click(function() {changeAction();});
+
+var showMenu = function() {
+  if (nivel == 1) {
+    $("#actionsmenu1").show();
+  } else if (nivel == 2) {
+    $("#actionsmenu2").show();
+  } else if (nivel == 3) {
+    $("#actionsmenu3").show();
+  } else if (nivel == 4) {
+    $("#actionsmenu4").show();
+  } else {
+    $("#actionsmenu5").show();
+  }
+};
+
+var hideMenu = function() {
+  $("#actionsmenu1").hide();
+  $("#actionsmenu2").hide();
+  $("#actionsmenu3").hide();
+  $("#actionsmenu4").hide();
+  $("#actionsmenu5").hide();
+};
 
 var startGame = function(avatarAudio) {
   nivel = 1;
   accionesElegidas = [];
   playSound(avatarAudio);
   $("#avatarsmenu").hide();
-  $("#actionsmenu").show();
+  showMenu();
   $("#userdata_container").show();
 
   tiempo = TIEMPO_TOTAL_JUEGO; 
@@ -88,7 +110,7 @@ var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, ha
     clearInterval(timerAccion);
     clearInterval(timerCambioAccion);
     $("#cambiar_escena_button").hide();
-    $("#actionsmenu").hide();
+    hideMenu();
     setActionTimer();
     updateInfo(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
     nivel++;
@@ -105,7 +127,7 @@ var nivelCompleto = function() {
 
 
 var changeAction = function() {
-  $("#actionsmenu").show();
+  showMenu();
   $("#userdata_container").show();
   $("#gameover").hide();
   $("#startscreen").hide();
@@ -122,7 +144,7 @@ var gameOver = function() {
   }
 
   $("#avatarsmenu").hide();
-  $("#actionsmenu").hide();
+  hideMenu();
   $("#cambiar_escena_button").hide();
   clearInterval(timer);
   clearInterval(timerAccion);
@@ -209,7 +231,7 @@ var resetGame = function() {
 };
 
 var showMainScreen = function() {
-  $("#actionsmenu").hide();
+  hideMenu();
   $("#avatarsmenu").hide();
   $("#userdata_container").hide();
   $("#youWin").hide();

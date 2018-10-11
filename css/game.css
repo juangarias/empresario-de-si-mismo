@@ -18,7 +18,7 @@ body {
     color:white;
 }
 
-#sarasa{
+#sarasa {
     width: 642px;
     height: 416px;
     top: 0px;
@@ -41,7 +41,7 @@ body {
     /*background-image: url("../assets/background.jpg");*/
 }
 
-#video{
+#video {
   position: absolute;
   width: 544px;
   height: 278px;
@@ -56,7 +56,7 @@ body {
   left: 0px;
 }
 
-#startscreen{
+#startscreen {
   background-image:url("../assets/start_screen_low.jpg");
   position: absolute;
   width: 544px;
@@ -219,7 +219,7 @@ left: -16px;
 
 /***** INICIO ACTION MENU *****/
 
-div#actionsmenu{
+div#actionsmenu1, div#actionsmenu2, div#actionsmenu3, div#actionsmenu4, div#actionsmenu5 {
   position: absolute;
   top: 110px;
   left: 6px;
@@ -253,34 +253,34 @@ p.texto{
   text-transform: uppercase;
 }
 
-#comer,#dormir,#trabajar,#ocio,#entrenar,#sexo,#votar,#belleza{
+.comer,.dormir,.trabajar,.ocio,.entrenar,.sexo,.votar,.belleza{
   width: 46px;
   background-repeat: no-repeat;
 }
 
-#comer {background: url("../assets/actions_sprite.png") -4px,0px;}
-#comer:hover {background: url("../assets/actions_sprite_over.png") -4px,0px;}
+.comer {background: url("../assets/actions_sprite.png") -4px,0px;}
+.comer:hover {background: url("../assets/actions_sprite_over.png") -4px,0px;}
 
-#dormir {background: url("../assets/actions_sprite.png") -64px,0px;}
-#dormir:hover {background: url("../assets/actions_sprite_over.png") -64px,0px;}
+.dormir {background: url("../assets/actions_sprite.png") -64px,0px;}
+.dormir:hover {background: url("../assets/actions_sprite_over.png") -64px,0px;}
 
-#trabajar {background: url("../assets/actions_sprite.png") -134px,0px;}
-#trabajar:hover {background: url("../assets/actions_sprite_over.png") -134px,0px;}
+.trabajar {background: url("../assets/actions_sprite.png") -134px,0px;}
+.trabajar:hover {background: url("../assets/actions_sprite_over.png") -134px,0px;}
 
-#ocio {background: url("../assets/actions_sprite.png") -202px,0px;}
-#ocio:hover {background: url("../assets/actions_sprite_over.png") -202px,0px;}
+.ocio {background: url("../assets/actions_sprite.png") -202px,0px;}
+.ocio:hover {background: url("../assets/actions_sprite_over.png") -202px,0px;}
 
-#entrenar {background: url("../assets/actions_sprite.png") -265px,0px;}
-#entrenar:hover {background: url("../assets/actions_sprite_over.png") -265px,0px;}
+.entrenar {background: url("../assets/actions_sprite.png") -265px,0px;}
+.entrenar:hover {background: url("../assets/actions_sprite_over.png") -265px,0px;}
 
-#sexo {background: url("../assets/actions_sprite.png") -328px,0px;}
-#sexo:hover {background: url("../assets/actions_sprite_over.png") -328px,0px;}
+.sexo {background: url("../assets/actions_sprite.png") -328px,0px;}
+.sexo:hover {background: url("../assets/actions_sprite_over.png") -328px,0px;}
 
-#votar {background: url("../assets/actions_sprite.png") -395px,0px;}
-#votar:hover {background: url("../assets/actions_sprite_over.png") -395px,0px;}
+.votar {background: url("../assets/actions_sprite.png") -395px,0px;}
+.votar:hover {background: url("../assets/actions_sprite_over.png") -395px,0px;}
 
-#belleza {background: url("../assets/actions_sprite.png") -460px,0px;}
-#belleza:hover {background: url("../assets/actions_sprite_over.png") -460px,0px;}
+.belleza {background: url("../assets/actions_sprite.png") -460px,0px;}
+.belleza:hover {background: url("../assets/actions_sprite_over.png") -460px,0px;}
 
 /***** FIN ACTION MENU *****/
 
