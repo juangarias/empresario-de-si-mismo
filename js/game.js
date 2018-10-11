@@ -9,8 +9,13 @@ const TIEMPO_ACCION = 1000;
 const TIEMPO_CAMBIO_ACCION = 5000;
 
 
-var ansiedad, felicidad, miedo, energia, hambre, dinero, energia, vidas, tiempo, tiempoAccion, tiempoCambioAccion, energyFlag;
+var ansiedad, felicidad, miedo, energia, hambre, dinero, energia, vidas;
+var tiempo, tiempoAccion, tiempoCambioAccion, energyFlag;
 var timer, timerAccion, timerCambioAccion;
+
+var nivel;
+var accionesElegidas;
+
 
 $(document).ready(function() {
    energiaInit     = 35;
@@ -50,6 +55,8 @@ $("#belleza").click(function(){ triggerAction(-1,2,1,0,1,-4, "belleza_audio");})
 $("#cambiar_escena_button").click(function() {changeAction();});
 
 var startGame = function(avatarAudio) {
+  nivel = 1;
+  accionesElegidas = [];
   playSound(avatarAudio);
   $("#avatarsmenu").hide();
   $("#actionsmenu").show();
@@ -75,13 +82,25 @@ var startGame = function(avatarAudio) {
 };
 
 var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew, audio) {
-  clearInterval(timerAccion);
-  clearInterval(timerCambioAccion);
-  $("#cambiar_escena_button").hide();
   playSound(audio);
-  $("#actionsmenu").hide();
-  setActionTimer();
-  updateInfo(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
+  accionesElegidas.push(audio);
+  if (nivelCompleto()) {
+    clearInterval(timerAccion);
+    clearInterval(timerCambioAccion);
+    $("#cambiar_escena_button").hide();
+    $("#actionsmenu").hide();
+    setActionTimer();
+    updateInfo(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
+    nivel++;
+    accionesElegidas = [];
+  }
+};
+
+var nivelCompleto = function() {
+  return nivel == 1 || nivel == 2 || nivel == 4 ||
+          ([3, 6].includes(nivel) && accionesElegidas.length == 2) ||
+          ([5, 7].includes(nivel) && accionesElegidas.length == 3) ||
+          ([8, 9 , 10].includes(nivel) && accionesElegidas.length == 4);
 };
 
 
