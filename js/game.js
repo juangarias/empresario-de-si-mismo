@@ -4,8 +4,8 @@
 
 
 // Tiempos para DEBUG / DEVELOPMENT
-const TIEMPO_TOTAL_JUEGO = 20000; 
-const TIEMPO_ACCION = 1000; 
+const TIEMPO_TOTAL_JUEGO = 60000; 
+const TIEMPO_ACCION = 3000; 
 const TIEMPO_CAMBIO_ACCION = 5000;
 
 
@@ -43,14 +43,14 @@ $("#vikinga").click(function() {startGame("vikinga_audio")});
 $("#empresaria").click(function() {startGame("empresaria_audio")});
 $("#hiphop").click(function() {startGame("hiphop_audio")});
 
-$(".comer").click(function(){ triggerAction(-2,3,-1,4,4,2, "comer_audio");});
-$(".dormir").click(function(){ triggerAction(-3,2,-1,3,3,-1, "dormir_audio");});
-$(".trabajar").click(function(){ triggerAction(2,-2,1,-3,3,4, "trabajar_audio");});
-$(".ocio").click(function(){ triggerAction(-1,3,-1,1,2,-2, "ocio_audio");});
-$(".entrenar").click(function(){ triggerAction(-2,1,-1,-3,3,-2, "entrenar_audio");});
-$(".sexo").click(function(){ triggerAction(-2,3,-1,-2,3,-1, "sexo_audio");});
-$(".votar").click(function(){ triggerAction(3,1,2,-1,1,0, "votar_audio");});
-$(".belleza").click(function(){ triggerAction(-1,2,1,0,1,-4, "belleza_audio");});
+$(".comer").click(function(){ $(this).addClass('comer-selected'); triggerAction(-2,3,-1,4,4,2, "comer_audio");});
+$(".dormir").click(function(){ $(this).addClass('dormir-selected'); triggerAction(-3,2,-1,3,3,-1, "dormir_audio");});
+$(".trabajar").click(function(){ $(this).addClass('trabajar-selected'); triggerAction(2,-2,1,-3,3,4, "trabajar_audio");});
+$(".ocio").click(function(){ $(this).addClass('ocio-selected'); triggerAction(-1,3,-1,1,2,-2, "ocio_audio");});
+$(".entrenar").click(function(){ $(this).addClass('entrenar-selected'); triggerAction(-2,1,-1,-3,3,-2, "entrenar_audio");});
+$(".sexo").click(function(){ $(this).addClass('sexo-selected'); triggerAction(-2,3,-1,-2,3,-1, "sexo_audio");});
+$(".votar").click(function(){ $(this).addClass('votar-selected'); triggerAction(3,1,2,-1,1,0, "votar_audio");});
+$(".belleza").click(function(){ $(this).addClass('belleza-selected'); triggerAction(-1,2,1,0,1,-4, "belleza_audio");});
 
 $("#cambiar_escena_button").click(function() {changeAction();});
 
@@ -109,6 +109,7 @@ var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, ha
   if (nivelCompleto()) {
     clearInterval(timerAccion);
     clearInterval(timerCambioAccion);
+    deselectActions();
     $("#cambiar_escena_button").hide();
     hideMenu();
     setActionTimer();
@@ -123,6 +124,17 @@ var nivelCompleto = function() {
           ([3, 6].includes(nivel) && accionesElegidas.length == 2) ||
           ([5, 7].includes(nivel) && accionesElegidas.length == 3) ||
           ([8, 9 , 10].includes(nivel) && accionesElegidas.length == 4);
+};
+
+var deselectActions = function() {
+  $(".comer").removeClass('comer-selected');
+  $(".dormir").removeClass('dormir-selected');
+  $(".trabajar").removeClass('trabajar-selected');
+  $(".ocio").removeClass('ocio-selected');
+  $(".entrenar").removeClass('entrenar-selected');
+  $(".sexo").removeClass('sexo-selected');
+  $(".votar").removeClass('votar-selected');
+  $(".belleza").removeClass('belleza-selected');
 };
 
 
@@ -167,7 +179,6 @@ var setActionTimer = function() {
     }
     tiempoAccion-=1000;
   }, 1000);
-
 };
 
 var setChangeActionTimer = function() {
@@ -192,7 +203,6 @@ var setChangeActionTimer = function() {
     $("#cambiar_escena_button p.texto_cambiar_escena").text('CAMBIAR ACCION:'+' '+seconds);
     tiempoCambioAccion-=1000;
   }, 1000);
-
 };
 
 
@@ -227,6 +237,7 @@ var resetGame = function() {
   energyFlag = false;
 
   clearInterval(timer);
+  deselectActions();
   showMainScreen();
 };
 

@@ -259,28 +259,28 @@ p.texto{
 }
 
 .comer {background: url("../assets/actions_sprite.png") -4px,0px;}
-.comer:hover {background: url("../assets/actions_sprite_over.png") -4px,0px;}
+.comer:hover, .comer-selected {background: url("../assets/actions_sprite_over.png") -4px,0px;}
 
 .dormir {background: url("../assets/actions_sprite.png") -64px,0px;}
-.dormir:hover {background: url("../assets/actions_sprite_over.png") -64px,0px;}
+.dormir:hover, .dormir-selected {background: url("../assets/actions_sprite_over.png") -64px,0px;}
 
 .trabajar {background: url("../assets/actions_sprite.png") -134px,0px;}
-.trabajar:hover {background: url("../assets/actions_sprite_over.png") -134px,0px;}
+.trabajar:hover, .trabajar-selected {background: url("../assets/actions_sprite_over.png") -134px,0px;}
 
 .ocio {background: url("../assets/actions_sprite.png") -202px,0px;}
-.ocio:hover {background: url("../assets/actions_sprite_over.png") -202px,0px;}
+.ocio:hover, .ocio-selected {background: url("../assets/actions_sprite_over.png") -202px,0px;}
 
 .entrenar {background: url("../assets/actions_sprite.png") -265px,0px;}
-.entrenar:hover {background: url("../assets/actions_sprite_over.png") -265px,0px;}
+.entrenar:hover, .entrenar-selected {background: url("../assets/actions_sprite_over.png") -265px,0px;}
 
 .sexo {background: url("../assets/actions_sprite.png") -328px,0px;}
-.sexo:hover {background: url("../assets/actions_sprite_over.png") -328px,0px;}
+.sexo:hover, .sexo-selected {background: url("../assets/actions_sprite_over.png") -328px,0px;}
 
 .votar {background: url("../assets/actions_sprite.png") -395px,0px;}
-.votar:hover {background: url("../assets/actions_sprite_over.png") -395px,0px;}
+.votar:hover, .votar-selected {background: url("../assets/actions_sprite_over.png") -395px,0px;}
 
 .belleza {background: url("../assets/actions_sprite.png") -460px,0px;}
-.belleza:hover {background: url("../assets/actions_sprite_over.png") -460px,0px;}
+.belleza:hover, .belleza-selected {background: url("../assets/actions_sprite_over.png") -460px,0px;}
 
 /***** FIN ACTION MENU *****/
 
