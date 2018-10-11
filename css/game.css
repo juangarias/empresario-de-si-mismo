@@ -17,6 +17,7 @@ body {
     width: 544px;
     color:white;
 }
+
 #sarasa{
     width: 642px;
     height: 416px;
@@ -24,7 +25,6 @@ body {
     left: 0px;
     position: absolute;
     background-color: black;
-
 }
 
 #sky {
