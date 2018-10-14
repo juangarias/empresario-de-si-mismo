@@ -28,17 +28,17 @@ body {
 }
 
 #sky {
-  z-index: 1000;
+  z-index: -1;
+  position: absolute;
 }
 
 #screen {
     width: 544px;
     height: 372px;
-    position: absolute;
+    position: relative;
+    margin: 0 auto;
     top: 23px;
-    left: 53px;
     z-index: 100;
-    /*background-image: url("../assets/background.jpg");*/
 }
 
 #video {
@@ -220,10 +220,9 @@ left: -16px;
 /***** INICIO ACTION MENU *****/
 
 div#actionsmenu1, div#actionsmenu2, div#actionsmenu3, div#actionsmenu4, div#actionsmenu5 {
-  position: absolute;
+  position: relative;
+  margin: 0 auto;
   top: 110px;
-  left: 6px;
-  width: 519px;
   height: 81px;
   background-repeat: no-repeat;
   background-position-x: center;
@@ -232,8 +231,71 @@ div#actionsmenu1, div#actionsmenu2, div#actionsmenu3, div#actionsmenu4, div#acti
   border: 6px solid #cdd2b4;
 }
 
+div#actionsmenu1{
+  width: 140px;
+}
+
+div#actionsmenu1 #titulo_action{
+  left: -47px;
+}
+
+div#actionsmenu2{
+  width: 192px;
+}
+
+div#actionsmenu2 #titulo_action{
+  left: -23px;
+}
+
+div#actionsmenu3{
+  width: 326px;
+}
+
+div#actionsmenu3 #titulo_action{
+  left: 34px;
+  width: 221px;
+}
+
+div#actionsmenu4{
+  width: 454px;
+}
+
+div#actionsmenu4 #titulo_action{
+  left: 108px;
+  width: 201px;
+}
+
+div#actionsmenu5{
+  width: 520px;
+}
+
+div#actionsmenu5 #titulo_action{
+  left: 116px;
+  width: 248px;
+}
+
+#titulo_action{
+  border-radius: 8px;
+  border: 6px solid #cdd2b4;
+  padding: 13px;
+  width: 201px;
+  height: 0px;
+  position: absolute;
+  background-color: rgba(0,0,0,0.7);
+  top: -50px;
+}
+
+#titulo_action p{
+  font-family: 'Press Start 2P';
+  font-size: 0.6em;
+  color: ##cdd1b4;
+  top: -14px;
+  position: relative;
+  width: 101%;
+  text-align: center;
+}
+
 div.contenedor{
-  width: 62px;
   height: 40px;
   float: left;
   margin-right: 8px;

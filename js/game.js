@@ -4,8 +4,8 @@
 
 
 // Tiempos para DEBUG / DEVELOPMENT
-const TIEMPO_TOTAL_JUEGO = 60000; 
-const TIEMPO_ACCION = 3000; 
+const TIEMPO_TOTAL_JUEGO = 60000;
+const TIEMPO_ACCION = 3000;
 const TIEMPO_CAMBIO_ACCION = 5000;
 
 
@@ -55,16 +55,32 @@ $(".belleza").click(function(){ $(this).addClass('belleza-selected'); triggerAct
 $("#cambiar_escena_button").click(function() {changeAction();});
 
 var showMenu = function() {
+
   if (nivel == 1) {
     $("#actionsmenu1").show();
   } else if (nivel == 2) {
-    $("#actionsmenu2").show();
+      $("#actionsmenu2").show();
   } else if (nivel == 3) {
-    $("#actionsmenu3").show();
+      $("#actionsmenu3").show();
   } else if (nivel == 4) {
-    $("#actionsmenu4").show();
+      $("#actionsmenu4").show();
   } else {
-    $("#actionsmenu5").show();
+      switch (nivel) {
+        case 5:
+          $("#actionsmenu5 #titulo_action p").text("Seleccioná tres acciones");
+          break;
+        case 6:
+          $("#actionsmenu5 #titulo_action p").text("Seleccioná dos acciones");
+          break;
+        case 7:
+          $("#actionsmenu5 #titulo_action p").text("Seleccioná tres acciones");
+          break;
+        case 8:
+          $("#actionsmenu5 #titulo_action p").text("Seleccioná cuatro acciones");
+          break;
+        default:
+      }
+      $("#actionsmenu5").show();
   }
 };
 
@@ -84,8 +100,8 @@ var startGame = function(avatarAudio) {
   showMenu();
   $("#userdata_container").show();
 
-  tiempo = TIEMPO_TOTAL_JUEGO; 
-  
+  tiempo = TIEMPO_TOTAL_JUEGO;
+
   timer = setInterval(function() {
     if (tiempo >= 0) {
       var minutes = Math.floor((tiempo % (1000 * 60 * 60)) / (1000 * 60));
@@ -147,7 +163,7 @@ var changeAction = function() {
 
 
 var gameOver = function() {
-  
+
   if (energyFlag) {
     playSound("gameover_audio");
     $("#gameover").show();

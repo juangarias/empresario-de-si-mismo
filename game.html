@@ -7,7 +7,7 @@
         <link rel="stylesheet" type="text/css" href="css/game.css">
         <link rel="stylesheet" type="text/css" href="css/fireworks.css">
     </head>
-    
+
     <body>
       <audio id="countdown_audio" src="assets/final_countdown.mp3" autostart="false" ></audio>
       <audio id="gameover_audio" src="assets/game_over.mp3" autostart="false" ></audio>
@@ -27,9 +27,8 @@
       <audio id="sexo_audio" src="assets/sexo_m.mp3" autostart="false" ></audio>
       <audio id="votar_audio" src="assets/votar_m.mp3" autostart="false" ></audio>
       <audio id="belleza_audio" src="assets/belleza_m.mp3" autostart="false" ></audio>
-      
+
       <div id="sarasa" >
-        <canvas id="sky" width="640" height="480"></canvas>
         <div id="screen">
           <div id="video">
             <iframe id="feed" scrolling="no" src="http://localhost:8081/browserfs.html" frameborder="0"></iframe>
@@ -46,20 +45,20 @@
           </div>
 
           <div id="actionsmenu1">
-            <div id="titulo_avatar"><p>Seleccion&aacute; una acci&oacute;n</p></div>
+            <div id="titulo_action"><p>Seleccion&aacute; una acci&oacute;n</p></div>
         		<div class="contenedor dormir"><p class="texto">Dormir</p></div>
         		<div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
           </div>
 
           <div id="actionsmenu2">
-            <div id="titulo_avatar"><p>Seleccion&aacute; una acci&oacute;n</p></div>
+            <div id="titulo_action"><p>Seleccion&aacute; una acci&oacute;n</p></div>
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
             <div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
             <div class="contenedor votar"> <p class="texto">Votar</p></div>
           </div>
 
           <div id="actionsmenu3">
-            <div id="titulo_avatar"><p>Seleccion&aacute; dos acciones</p></div>
+            <div id="titulo_action"><p>Seleccion&aacute; dos acciones</p></div>
             <div class="contenedor comer"><p class="texto">Comer</p></div>
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
             <div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
@@ -68,7 +67,7 @@
           </div>
 
           <div id="actionsmenu4">
-            <div id="titulo_avatar"><p>Seleccion&aacute; una acci&oacute;n</p></div>
+            <div id="titulo_action"><p>Seleccion&aacute; una acci&oacute;n</p></div>
             <div class="contenedor comer"><p class="texto">Comer</p></div>
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
             <div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
@@ -79,7 +78,7 @@
           </div>
 
           <div id="actionsmenu5">
-            <div id="titulo_avatar"><p>Seleccion&aacute; tres acciones</p></div>
+            <div id="titulo_action"><p>Seleccion&aacute; cuatro acciones</p></div>
             <div class="contenedor comer"><p class="texto">Comer</p></div>
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
             <div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
@@ -110,6 +109,7 @@
 
           <div id="gameover"><p class="texto_gameover">GAME OVER</p></div>
           <div id="youWin"><p class="texto_gameover">1UP WINS</p></div>
+          <canvas id="sky" width="640" height="480"></canvas>
           <div id="cambiar_escena_button"><p class="texto_cambiar_escena"></p></div>
         </div>
       </div>
