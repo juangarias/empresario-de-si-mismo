@@ -1,11 +1,13 @@
 //const TIEMPO_TOTAL_JUEGO = 300000; /* 5 minutos */
 //const TIEMPO_ACCION = 15000; /* 15 segundos */
+// const TIEMPO_MULTI_ACCION = 25000; /* 25 segundos */
 //const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
 
 
 // Tiempos para DEBUG / DEVELOPMENT
 const TIEMPO_TOTAL_JUEGO = 60000;
-const TIEMPO_ACCION = 3000;
+const TIEMPO_ACCION = 2000;
+const TIEMPO_MULTI_ACCION = 4000;
 const TIEMPO_CAMBIO_ACCION = 5000;
 
 
@@ -36,12 +38,12 @@ $("#start_button").click(function() {
   $(this).disabled;
 });
 
-$("#fitness").click(function() {startGame("fitness_audio")});
-$("#payasa").click(function() {startGame("payasa_audio")});
-$("#maga").click(function() {startGame("maga_audio")});
-$("#vikinga").click(function() {startGame("vikinga_audio")});
-$("#empresaria").click(function() {startGame("empresaria_audio")});
-$("#hiphop").click(function() {startGame("hiphop_audio")});
+$("#fitness").click(function() {showLoading("fitness_audio")});
+$("#payasa").click(function() {showLoading("payasa_audio")});
+$("#maga").click(function() {showLoading("maga_audio")});
+$("#vikinga").click(function() {showLoading("vikinga_audio")});
+$("#empresaria").click(function() {showLoading("empresaria_audio")});
+$("#hiphop").click(function() {showLoading("hiphop_audio")});
 
 $(".comer").click(function(){ $(this).addClass('comer-selected'); triggerAction(-2,3,-1,4,4,2, "comer_audio");});
 $(".dormir").click(function(){ $(this).addClass('dormir-selected'); triggerAction(-3,2,-1,3,3,-1, "dormir_audio");});
@@ -67,16 +69,16 @@ var showMenu = function() {
   } else {
       switch (nivel) {
         case 5:
-          $("#actionsmenu5 #titulo_action p").text("Seleccioná tres acciones");
+          $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; tres acciones");
           break;
         case 6:
-          $("#actionsmenu5 #titulo_action p").text("Seleccioná dos acciones");
+          $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; dos acciones");
           break;
         case 7:
-          $("#actionsmenu5 #titulo_action p").text("Seleccioná tres acciones");
+          $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; tres acciones");
           break;
         case 8:
-          $("#actionsmenu5 #titulo_action p").text("Seleccioná cuatro acciones");
+          $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; cuatro acciones");
           break;
         default:
       }
@@ -92,11 +94,22 @@ var hideMenu = function() {
   $("#actionsmenu5").hide();
 };
 
-var startGame = function(avatarAudio) {
-  nivel = 1;
-  accionesElegidas = [];
+var showLoading = function(avatarAudio) {
   playSound(avatarAudio);
   $("#avatarsmenu").hide();
+  $("#loading").show();
+
+  var t = setInterval(function() {
+    $("#loading").hide();
+    startGame();
+    clearInterval(t);
+  }, 5000);
+};
+
+var startGame = function() {
+  nivel = 1;
+  accionesElegidas = [];
+  
   showMenu();
   $("#userdata_container").show();
 
@@ -142,6 +155,10 @@ var nivelCompleto = function() {
           ([8, 9 , 10].includes(nivel) && accionesElegidas.length == 4);
 };
 
+var calcularTiempoAccion = function() {
+  return (nivel == 1 || nivel == 2 || nivel == 4) ? TIEMPO_ACCION : TIEMPO_MULTI_ACCION;
+}
+
 var deselectActions = function() {
   $(".comer").removeClass('comer-selected');
   $(".dormir").removeClass('dormir-selected');
@@ -182,7 +199,7 @@ var gameOver = function() {
 };
 
 var setActionTimer = function() {
-  tiempoAccion = TIEMPO_ACCION;
+  tiempoAccion = calcularTiempoAccion();
 
   timerAccion = setInterval(function() {
     if (tiempoAccion <= 0) {
@@ -263,6 +280,7 @@ var showMainScreen = function() {
   $("#userdata_container").hide();
   $("#youWin").hide();
   $("#gameover").hide();
+  $("#loading").hide();
   $("#cambiar_escena_button").hide();
   $("#sky").hide();
   $("#startscreen").show();
@@ -273,6 +291,7 @@ var showWinnerMessage = function() {
   $("#video").hide();
   $("#youWin").show();
   $("#sky").show();
+  playSound("youwin_audio");
   animate("#sky");
 };
 
