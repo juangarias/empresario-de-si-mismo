@@ -1,14 +1,14 @@
-//const TIEMPO_TOTAL_JUEGO = 300000; /* 5 minutos */
-//const TIEMPO_ACCION = 15000; /* 15 segundos */
-// const TIEMPO_MULTI_ACCION = 25000; /* 25 segundos */
-//const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
+const TIEMPO_TOTAL_JUEGO = 300000; /* 5 minutos */
+const TIEMPO_ACCION = 15000; /* 15 segundos */
+const TIEMPO_MULTI_ACCION = 25000; /* 25 segundos */
+const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
 
 
 // Tiempos para DEBUG / DEVELOPMENT
-const TIEMPO_TOTAL_JUEGO = 60000;
-const TIEMPO_ACCION = 2000;
-const TIEMPO_MULTI_ACCION = 4000;
-const TIEMPO_CAMBIO_ACCION = 5000;
+//const TIEMPO_TOTAL_JUEGO = 60000;
+//const TIEMPO_ACCION = 2000;
+//const TIEMPO_MULTI_ACCION = 4000;
+//const TIEMPO_CAMBIO_ACCION = 5000;
 
 
 var ansiedad, felicidad, miedo, energia, hambre, dinero, energia, vidas;
@@ -111,6 +111,8 @@ var startGame = function() {
   accionesElegidas = [];
   
   showMenu();
+
+  $("#video").show();
   $("#userdata_container").show();
 
   tiempo = TIEMPO_TOTAL_JUEGO;
@@ -283,12 +285,14 @@ var showMainScreen = function() {
   $("#loading").hide();
   $("#cambiar_escena_button").hide();
   $("#sky").hide();
+  $("#video").hide();
+
   $("#startscreen").show();
-  $("#video").show();
 };
 
 var showWinnerMessage = function() {
   $("#video").hide();
+
   $("#youWin").show();
   $("#sky").show();
   playSound("youwin_audio");
