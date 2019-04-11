@@ -2,6 +2,7 @@ const TIEMPO_TOTAL_JUEGO = 300000; /* 5 minutos */
 const TIEMPO_ACCION = 15000; /* 15 segundos */
 const TIEMPO_MULTI_ACCION = 25000; /* 25 segundos */
 const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
+const TIEMPO_LOADING = 30000; /* 30 segundos */
 
 
 // Tiempos para DEBUG / DEVELOPMENT
@@ -9,7 +10,7 @@ const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
 //const TIEMPO_ACCION = 2000;
 //const TIEMPO_MULTI_ACCION = 4000;
 //const TIEMPO_CAMBIO_ACCION = 5000;
-
+//const TIEMPO_LOADING = 5000;
 
 var ansiedad, felicidad, miedo, energia, hambre, dinero, energia, vidas;
 var tiempo, tiempoAccion, tiempoCambioAccion, energyFlag;
@@ -103,7 +104,7 @@ var showLoading = function(avatarAudio) {
     $("#loading").hide();
     startGame();
     clearInterval(t);
-  }, 5000);
+  }, TIEMPO_LOADING);
 };
 
 var startGame = function() {
@@ -218,12 +219,12 @@ var setActionTimer = function() {
 
 var setChangeActionTimer = function() {
   tiempoCambioAccion = TIEMPO_CAMBIO_ACCION
-  $("#cambiar_escena_button p.texto_cambiar_escena").text('CAMBIAR ACCION: 0'+Math.floor((tiempoCambioAccion % (1000 * 60)) / 1000));
+  $("#cambiar_escena_button p.texto_cambiar_escena").text('CAMBIAR ACCION: ' + formatSeconds(tiempoCambioAccion));
   $("#cambiar_escena_button").show();
 
   timerCambioAccion = setInterval(function() {
     if (tiempoCambioAccion > 0) {
-      var seconds = Math.floor((tiempoCambioAccion % (1000 * 60)) / 1000);
+      var seconds = formatSeconds(tiempoCambioAccion);
       if (seconds <= 5 && seconds > 0) {
         playSound("countdown_audio");
       }
@@ -238,6 +239,11 @@ var setChangeActionTimer = function() {
     $("#cambiar_escena_button p.texto_cambiar_escena").text('CAMBIAR ACCION:'+' '+seconds);
     tiempoCambioAccion-=1000;
   }, 1000);
+};
+
+var formatSeconds = function(seconds) {
+  return Math.floor(seconds  / 1000);
+  //return Math.floor((seconds % (1000 * 60)) / 1000);
 };
 
 
