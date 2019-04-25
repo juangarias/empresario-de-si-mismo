@@ -101,7 +101,7 @@ var hideMenu = function() {
 
 var showLoading = function(avatarAudio) {
   playSound(avatarAudio);
-  //playSound("loading_audio");
+  playSound("loading_audio");
   $("#avatarsmenu").hide();
   $("#loading").show();
 
