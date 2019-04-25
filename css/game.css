@@ -184,6 +184,11 @@ body {
   font-size: 0.8em;
 }
 
+.text_warning_style{
+  color: yellow;
+  animation: blink 1s linear infinite;
+}
+
 .text_danger_style{
   color: red;
   animation: blink 1s linear infinite;
@@ -293,6 +298,39 @@ div#actionsmenu5 #titulo_action{
   position: relative;
   width: 101%;
   text-align: center;
+}
+
+#cambiar_escena_button{
+  border-radius: 8px;
+  border: 6px solid #cdd2b4;
+  padding: 13px;
+  width: 176px;
+  height: 0px;
+  position: absolute;
+  background-color: rgba(0,0,0,0.7);
+  top: 100px;
+  left: -12px;
+}
+
+#cambiar_escena_button:hover{
+  border: 6px solid #d3a75f;
+}
+
+#cambiar_escena_button:hover p.texto_cambiar_escena{
+  color: #d6bd96;
+}
+p.texto_cambiar_escena{
+  font-family: 'Press Start 2P';
+  font-size: 0.6em;
+  color: white;
+  text-align: center;
+  top: -15px;
+  position: relative;
+  text-transform: uppercase;
+  animation: blink 1s linear infinite;
+  position: relative;
+  width: 278px;
+  left: -51px;
 }
 
 div.contenedor{
@@ -451,35 +489,9 @@ p.texto_gameover{
   animation: blink 1s linear infinite;
 }
 
-#cambiar_escena_button{
-  border-radius: 8px;
-  border: 6px solid #cdd2b4;
-  padding: 13px;
-  width: 176px;
-  height: 0px;
-  position: absolute;
-  background-color: rgba(0,0,0,0.7);
-  top: 235px;
-  left: 4px;
-}
-
-#cambiar_escena_button:hover{
-  border: 6px solid #d3a75f;
-}
-
-#cambiar_escena_button:hover p.texto_cambiar_escena{
-  color: #d6bd96;
-}
-p.texto_cambiar_escena{
-  font-family: 'Press Start 2P';
-  font-size: 0.6em;
-  color: white;
-  text-align: center;
-  top: -15px;
-  position: relative;
-  text-transform: uppercase;
-  animation: blink 1s linear infinite;
-  position: relative;
-  width: 278px;
-  left: -51px;
+.center {
+  margin: auto;
+  width: 50%;
+  border: 3px solid green;
+  padding: 10px;
 }

@@ -12,28 +12,30 @@
       <audio id="countdown_audio" src="assets/final_countdown.mp3" autostart="false" ></audio>
       <audio id="gameover_audio" src="assets/game_over.mp3" autostart="false" ></audio>
 
-      <audio id="fitness_audio" src="assets/fitness.mp3" autostart="false" ></audio>
-      <audio id="payasa_audio" src="assets/payasa.mp3" autostart="false" ></audio>
-      <audio id="maga_audio" src="assets/maga.mp3" autostart="false" ></audio>
-      <audio id="vikinga_audio" src="assets/vikinga.mp3" autostart="false" ></audio>
-      <audio id="empresaria_audio" src="assets/empresaria.mp3" autostart="false" ></audio>
-      <audio id="hiphop_audio" src="assets/hiphop.mp3" autostart="false" ></audio>
+      <audio id="fitness_audio" src="assets/fitness.mp3" autostart="false"></audio>
+      <audio id="payasa_audio" src="assets/payasa.mp3" autostart="false"></audio>
+      <audio id="maga_audio" src="assets/maga.mp3" autostart="false"></audio>
+      <audio id="vikinga_audio" src="assets/vikinga.mp3" autostart="false"></audio>
+      <audio id="empresaria_audio" src="assets/empresaria.mp3" autostart="false"></audio>
+      <audio id="hiphop_audio" src="assets/hiphop.mp3" autostart="false"></audio>
 
-      <audio id="comer_audio" src="assets/comer.mp3" autostart="false" ></audio>
-      <audio id="dormir_audio" src="assets/dormir.mp3" autostart="false" ></audio>
-      <audio id="trabajar_audio" src="assets/trabajar.mp3" autostart="false" ></audio>
-      <audio id="ocio_audio" src="assets/ocio.mp3" autostart="false" ></audio>
-      <audio id="entrenar_audio" src="assets/entrenar.mp3" autostart="false" ></audio>
-      <audio id="sexo_audio" src="assets/sexo.mp3" autostart="false" ></audio>
-      <audio id="votar_audio" src="assets/votar.mp3" autostart="false" ></audio>
-      <audio id="belleza_audio" src="assets/belleza_m.mp3" autostart="false" ></audio>
+      <audio id="comer_audio" src="assets/comer.mp3" autostart="false"></audio>
+      <audio id="dormir_audio" src="assets/dormir.mp3" autostart="false"></audio>
+      <audio id="trabajar_audio" src="assets/trabajar.mp3" autostart="false"></audio>
+      <audio id="ocio_audio" src="assets/ocio.mp3" autostart="false"></audio>
+      <audio id="entrenar_audio" src="assets/entrenar.mp3" autostart="false"></audio>
+      <audio id="sexo_audio" src="assets/sexo.mp3" autostart="false"></audio>
+      <audio id="votar_audio" src="assets/votar.mp3" autostart="false"></audio>
+      <audio id="belleza_audio" src="assets/belleza.mp3" autostart="false"></audio>
 
-      <audio id="youwin_audio" src="assets/youwin.mp3" autostart="false" ></audio>
+      <audio id="youwin_audio" src="assets/youwin.mp3" autostart="false"></audio>
+
+      <audio id="loading_audio" src="assets/loading.wav" autostart="false"></audio>
 
       <div id="sarasa" >
         <div id="screen">
           <div id="video">
-            <iframe id="feed" scrolling="no" src="http://192.168.1.101:8080/jsfs.html" frameborder="0" style="position: absolute;left: 25px;">
+            <iframe id="feed" scrolling="no" src="http://192.168.0.2:8080/jsfs.html" frameborder="0" style="position: absolute;left: 25px;">
             </iframe>
           </div>
           <div id="startscreen"><p id="start_button">Jugador 1 Iniciar</p></div>
@@ -49,6 +51,7 @@
 
           <div id="actionsmenu1">
             <div id="titulo_action"><p>Seleccion&aacute; una acci&oacute;n</p></div>
+            <div id="cambiar_escena_button" class="center"><p class="texto_cambiar_escena"></p></div>
         		<div class="contenedor dormir"><p class="texto">Dormir</p></div>
         		<div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
           </div>
@@ -58,6 +61,7 @@
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
             <div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
             <div class="contenedor votar"> <p class="texto">Votar</p></div>
+            <div id="cambiar_escena_button"><p class="texto_cambiar_escena"></p></div>
           </div>
 
           <div id="actionsmenu3">
@@ -67,6 +71,7 @@
             <div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
             <div class="contenedor votar"> <p class="texto">Votar</p></div>
             <div class="contenedor belleza"><p class="texto">Belleza</p></div>
+            <div id="cambiar_escena_button"><p class="texto_cambiar_escena"></p></div>
           </div>
 
           <div id="actionsmenu4">
@@ -78,6 +83,7 @@
             <div class="contenedor sexo"><p class="texto">Sexo</p></div>
             <div class="contenedor votar"> <p class="texto">Votar</p></div>
             <div class="contenedor belleza"><p class="texto">Belleza</p></div>
+            <div id="cambiar_escena_button"><p class="texto_cambiar_escena"></p></div>
           </div>
 
           <div id="actionsmenu5">
@@ -90,6 +96,7 @@
             <div class="contenedor sexo"><p class="texto">Sexo</p></div>
             <div class="contenedor votar"> <p class="texto">Votar</p></div>
             <div class="contenedor belleza"><p class="texto">Belleza</p></div>
+            <div id="cambiar_escena_button"><p class="texto_cambiar_escena"></p></div>
           </div>
 
           <div id="userdata_container">
@@ -114,11 +121,10 @@
           <div id="gameover"><p class="texto_gameover">GAME OVER</p></div>
           <div id="youWin"><p class="texto_gameover">1UP WINS</p></div>
           <canvas id="sky" width="640" height="480"></canvas>
-          <div id="cambiar_escena_button"><p class="texto_cambiar_escena"></p></div>
         </div>
       </div>
 
-      <script type="text/javascript" src="js/jquery-3.3.1.slim.js" integrity="sha256-fNXJFIlca05BIO2Y5zh1xrShK3ME+/lYZ0j+ChxX2DA=" crossorigin="anonymous"></script>
+      <script type="text/javascript" src="js/jquery-3.4.0.slim.min.js"></script>
       <script type="text/javascript" src="js/fireworks.js"></script>
       <script type="text/javascript" src="js/game.js"></script>
 
