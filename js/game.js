@@ -2,8 +2,13 @@ const TIEMPO_TOTAL_JUEGO = 300000; /* 5 minutos */
 const TIEMPO_ACCION = 15000; /* 15 segundos */
 const TIEMPO_MULTI_ACCION = 25000; /* 25 segundos */
 const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
-const TIEMPO_LOADING = 38000; /* 30 segundos */
+const TIEMPO_LOADING = 37600; /* 30 segundos */
 
+const ENERGY_BAR_START = 35;
+const ENERGY_BAR_MIN = 0;
+const ENERGY_BAR_WARN_LOW = 22;
+const ENERGY_BAR_WARN_HIGH = 44;
+const ENERGY_BAR_MAX = 67;
 
 // Tiempos para DEBUG / DEVELOPMENT
 //const TIEMPO_TOTAL_JUEGO = 60000;
@@ -13,7 +18,7 @@ const TIEMPO_LOADING = 38000; /* 30 segundos */
 //const TIEMPO_LOADING = 2000;
 
 var ansiedad, felicidad, miedo, energia, hambre, dinero, energia, vidas;
-var tiempo, tiempoAccion, tiempoCambioAccion, energyFlag;
+var tiempo, tiempoAccion, tiempoCambioAccion, isGameOver;
 var timer, timerAccion, timerCambioAccion;
 
 var nivel;
@@ -21,17 +26,19 @@ var accionesElegidas;
 
 
 $(document).ready(function() {
-   energiaInit     = 35;
-   ansiedad   = energiaInit;
-   felicidad  = energiaInit;
-   miedo      = energiaInit;
-   energia    = energiaInit;
-   hambre     = energiaInit;
-   dinero     = energiaInit;
-   energyFlag = false;
-
+   resetFactors();
    showMainScreen();
 });
+
+var resetFactors = function() {
+  ansiedad   = ENERGY_BAR_START;
+  felicidad  = ENERGY_BAR_START;
+  miedo      = ENERGY_BAR_START;
+  energia    = ENERGY_BAR_START;
+  hambre     = ENERGY_BAR_START;
+  dinero     = ENERGY_BAR_START;
+  isGameOver = false;
+}
 
 $("#start_button").click(function() {
   $("#startscreen").hide();
@@ -94,7 +101,7 @@ var hideMenu = function() {
 
 var showLoading = function(avatarAudio) {
   playSound(avatarAudio);
-  playSound("loading_audio");
+  //playSound("loading_audio");
   $("#avatarsmenu").hide();
   $("#loading").show();
 
@@ -177,7 +184,7 @@ var setActionTimer = function() {
   timerAccion = setInterval(function() {
     if (tiempoAccion <= 0) {
         clearInterval(timerAccion);
-        if(energyFlag) {
+        if(isGameOver) {
           gameOver();
         } else {
           setChangeActionTimer();
@@ -211,7 +218,7 @@ var setChangeActionTimer = function() {
         seconds = "0"+seconds;
       }
     } else {
-      energyFlag = true;
+      isGameOver = true;
       gameOver();
     }
 
@@ -221,7 +228,7 @@ var setChangeActionTimer = function() {
 };
 
 var setChangeActionWarningText = function(seconds) {
-  $("#cambiar_escena_button p.texto_cambiar_escena").text('CAMBIAR ACCION:' + ' ' + seconds);
+  $("#cambiar_escena_button p.texto_cambiar_escena").text(seconds);
 }
 
 var formatSeconds = function(seconds) {
@@ -236,7 +243,7 @@ var playSound = function(audio) {
 };
 
 var gameOver = function() {
-  if (energyFlag) {
+  if (isGameOver) {
     playSound("gameover_audio");
     $("#gameover").show();
   } else {
@@ -253,30 +260,15 @@ var gameOver = function() {
 };
 
 var resetGame = function() {
-  //$("#vidas").width("78px");
+  $("#ansiedad p").removeClass();
+  $("#felicidad p").removeClass();
+  $("#miedo p").removeClass();
+  $("#energia p").removeClass();
+  $("#hambre p").removeClass();
+  $("#dinero p").removeClass();
 
-  $("#ansiedad").width( energiaInit + "px");
-  $("#felicidad").width(energiaInit + "px");
-  $("#miedo").width(energiaInit + "px");
-  $("#energia").width(energiaInit + "px");
-  $("#hambre").width(energiaInit + "px");
-  $("#dinero").width(energiaInit + "px");
-
-  $("#ansiedad p").removeClass("text_danger_style");
-  $("#felicidad p").removeClass("text_danger_style");
-  $("#miedo p").removeClass("text_danger_style");
-  $("#energia p").removeClass("text_danger_style");
-  $("#hambre p").removeClass("text_danger_style");
-  $("#dinero p").removeClass("text_danger_style");
-
-  ansiedad   = energiaInit;
-  felicidad  = energiaInit;
-  miedo      = energiaInit;
-  energia    = energiaInit;
-  hambre     = energiaInit;
-  dinero     = energiaInit;
-  energyFlag = false;
-
+  resetFactors();
+  updateBarsWidth();
   clearInterval(timer);
   deselectActions();
   showMainScreen();
@@ -291,13 +283,11 @@ var showMainScreen = function() {
   $("#loading").hide();
   $("#sky").hide();
   $("#video").hide();
-
   $("#startscreen").show();
 };
 
 var showWinnerMessage = function() {
   $("#video").hide();
-
   $("#youWin").show();
   $("#sky").show();
   playSound("youwin_audio");
@@ -305,27 +295,16 @@ var showWinnerMessage = function() {
 };
 
 var updateInfo = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew) {
-
-  // Primero actualizamos el valor de cada item.
   updateAnsiedad(ansiedadNew);
   updateFelicidad(felicidadNew);
   updateMiedo(miedoNew);
   updateEnergia(energiaNew);  
   updateHambre(hambreNew);
   updateDinero(dineroNew);
+  
+  updateBarsWidth();
 
-  if (ansiedad >= 67 || miedo >= 67 || felicidad <= 0 || energia <= 0 || hambre <= 0 || dinero <= 0) {
-    energyFlag = true;
-    console.log("ENERGY FLAG :" + energyFlag);
-  }
-
-  //Ahora lo actualizamos en los estilos
-  $("#ansiedad").width(ansiedad + "px");
-  $("#felicidad").width(felicidad + "px");
-  $("#miedo").width(miedo + "px");
-  $("#energia").width(energia + "px");
-  $("#hambre").width(hambre + "px");
-  $("#dinero").width(dinero + "px");
+  isGameOver = calculateIsAvatarDead();
 };
 
 var updateAnsiedad = function(ansiedadNew) {
@@ -361,26 +340,40 @@ var updateDinero = function(dineroNew) {
 
 var calculateNewFactorValue = function(actual, newValue) {
   actual += newValue * 7;
-  return Math.min(Math.max(actual,0),67);
+  return Math.min(Math.max(actual,0), ENERGY_BAR_MAX);
 };
 
 var updateStyleMoreBetter = function(value, idBar) {
-  if (value <= 0) {
+  if (value <= ENERGY_BAR_MIN) {
     $(idBar).toggleClass("text_danger_style");
-  } else if (value < 22) {
+  } else if (value < ENERGY_BAR_WARN_LOW) {
     $(idBar).toggleClass("text_warning_style");
   } else {
     $(idBar).removeClass();
   }
-}
+};
 
 var updateStyleLessBetter = function(value, idBar) {
-  if (value>=67) {
+  if (value >= ENERGY_BAR_MAX) {
     $(idBar).toggleClass("text_danger_style");
-  } else if (value > 44) {
+  } else if (value > ENERGY_BAR_WARN_HIGH) {
     $(idBar).toggleClass("text_warning_style");
   } else {
     $(idBar).removeClass();
   }
-}
+};
 
+var updateBarsWidth = function() {
+  $("#ansiedad").width(ansiedad + "px");
+  $("#felicidad").width(felicidad + "px");
+  $("#miedo").width(miedo + "px");
+  $("#energia").width(energia + "px");
+  $("#hambre").width(hambre + "px");
+  $("#dinero").width(dinero + "px");
+};
+
+var calculateIsAvatarDead = function() {
+  return ansiedad >= ENERGY_BAR_MAX || miedo >= ENERGY_BAR_MAX || 
+          felicidad <= ENERGY_BAR_MIN || energia <= ENERGY_BAR_MIN || 
+          hambre <= ENERGY_BAR_MIN || dinero <= ENERGY_BAR_MIN;
+}

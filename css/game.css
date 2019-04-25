@@ -1,12 +1,11 @@
-
 @font-face { font-family: 'thinPixel'; src: url('../fonts/thin_pixel-7.ttf');}
 @font-face { font-family: 'backto1982'; src: url('../fonts/backto1982.ttf');}
 @font-face { font-family: 'alterebro-pixel-font'; src: url('../fonts/alterebro-pixel-font.ttf');}
 
 @keyframes blink{
-0%{opacity: 0;}
-50%{opacity: .5;}
-100%{opacity: 1;}
+  0%{opacity: 0;}
+  50%{opacity: .5;}
+  100%{opacity: 1;}
 }
 
 body {
@@ -239,47 +238,20 @@ div#actionsmenu1, div#actionsmenu2, div#actionsmenu3, div#actionsmenu4, div#acti
 div#actionsmenu1{
   width: 140px;
 }
-
-div#actionsmenu1 #titulo_action{
-  left: -47px;
-}
-
 div#actionsmenu2{
   width: 192px;
 }
-
-div#actionsmenu2 #titulo_action{
-  left: -23px;
-}
-
 div#actionsmenu3{
   width: 326px;
 }
-
-div#actionsmenu3 #titulo_action{
-  left: 34px;
-  width: 221px;
-}
-
 div#actionsmenu4{
   width: 454px;
 }
-
-div#actionsmenu4 #titulo_action{
-  left: 108px;
-  width: 201px;
-}
-
 div#actionsmenu5{
   width: 520px;
 }
 
-div#actionsmenu5 #titulo_action{
-  left: 116px;
-  width: 248px;
-}
-
-#titulo_action{
+#titulo_action {
   border-radius: 8px;
   border: 6px solid #cdd2b4;
   padding: 13px;
@@ -290,7 +262,26 @@ div#actionsmenu5 #titulo_action{
   top: -50px;
 }
 
-#titulo_action p{
+div#actionsmenu1 #titulo_action{
+  left: -47px;
+}
+div#actionsmenu2 #titulo_action{
+  left: -23px;
+}
+div#actionsmenu3 #titulo_action{
+  left: 34px;
+  width: 221px;
+}
+div#actionsmenu4 #titulo_action{
+  left: 108px;
+  width: 201px;
+}
+div#actionsmenu5 #titulo_action{
+  left: 116px;
+  width: 248px;
+}
+
+#titulo_action p {
   font-family: 'Press Start 2P';
   font-size: 0.6em;
   color: ##cdd1b4;
@@ -300,37 +291,53 @@ div#actionsmenu5 #titulo_action{
   text-align: center;
 }
 
-#cambiar_escena_button{
+#cambiar_escena_button {
   border-radius: 8px;
-  border: 6px solid #cdd2b4;
-  padding: 13px;
-  width: 176px;
-  height: 0px;
+/*  border: 6px solid #cdd2b4; */
+  padding: 9px 9px 15px 17px;
+  width: 18px; 
+  height: 7px;
   position: absolute;
   background-color: rgba(0,0,0,0.7);
   top: 100px;
-  left: -12px;
 }
 
 #cambiar_escena_button:hover{
-  border: 6px solid #d3a75f;
+  /*border: 6px solid #d3a75f;*/
 }
 
 #cambiar_escena_button:hover p.texto_cambiar_escena{
   color: #d6bd96;
 }
+
+div#actionsmenu1 #cambiar_escena_button {
+  left: 50px;
+}
+div#actionsmenu2 #cambiar_escena_button {
+  left: 70px;
+}
+div#actionsmenu3 #cambiar_escena_button {
+  left: 136px;
+}
+div#actionsmenu4 #cambiar_escena_button {
+  left: 200px;
+}
+div#actionsmenu5 #cambiar_escena_button {
+  left: 230px;
+}
+
 p.texto_cambiar_escena{
   font-family: 'Press Start 2P';
-  font-size: 0.6em;
+  font-size: 1em;
   color: white;
   text-align: center;
-  top: -15px;
+  top: -17px;
   position: relative;
   text-transform: uppercase;
   animation: blink 1s linear infinite;
-  position: relative;
   width: 278px;
-  left: -51px;
+  left: -133px;
+  text-align: center;
 }
 
 div.contenedor{
@@ -487,11 +494,4 @@ p.texto_gameover{
   position: relative;
   text-transform: uppercase;
   animation: blink 1s linear infinite;
-}
-
-.center {
-  margin: auto;
-  width: 50%;
-  border: 3px solid green;
-  padding: 10px;
 }
