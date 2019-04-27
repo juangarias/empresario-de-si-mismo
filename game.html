@@ -49,14 +49,14 @@
             <div class="contenedor_avatar" id="hiphop"><p class="texto_avatar">hiphop</p></div>
           </div>
 
-          <div id="actionsmenu1">
+          <div id="actionsmenu1" class="actionsmenu-screen">
             <div id="titulo_action"><p>Seleccion&aacute; una acci&oacute;n</p></div>
         		<div class="contenedor dormir"><p class="texto">Dormir</p></div>
         		<div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
             <div id="cambiar_escena_button"><p class="texto_cambiar_escena">99</p></div>
           </div>
 
-          <div id="actionsmenu2">
+          <div id="actionsmenu2" class="actionsmenu-screen">
             <div id="titulo_action"><p>Seleccion&aacute; una acci&oacute;n</p></div>
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
             <div class="contenedor trabajar"><p class="texto">Trabajar</p></div>
@@ -64,7 +64,7 @@
             <div id="cambiar_escena_button"><p class="texto_cambiar_escena">99</p></div>
           </div>
 
-          <div id="actionsmenu3">
+          <div id="actionsmenu3" class="actionsmenu-screen">
             <div id="titulo_action"><p>Seleccion&aacute; dos acciones</p></div>
             <div class="contenedor comer"><p class="texto">Comer</p></div>
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
@@ -74,7 +74,7 @@
             <div id="cambiar_escena_button"><p class="texto_cambiar_escena">99</p></div>
           </div>
 
-          <div id="actionsmenu4">
+          <div id="actionsmenu4" class="actionsmenu-screen">
             <div id="titulo_action"><p>Seleccion&aacute; una acci&oacute;n</p></div>
             <div class="contenedor comer"><p class="texto">Comer</p></div>
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
@@ -86,7 +86,7 @@
             <div id="cambiar_escena_button"><p class="texto_cambiar_escena">99</p></div>
           </div>
 
-          <div id="actionsmenu5">
+          <div id="actionsmenu5" class="actionsmenu-screen">
             <div id="titulo_action"><p>Seleccion&aacute; cuatro acciones</p></div>
             <div class="contenedor comer"><p class="texto">Comer</p></div>
             <div class="contenedor dormir"><p class="texto">Dormir</p></div>
@@ -117,15 +117,20 @@
               <!--div id="vidas"></div-->
           </div>
 
-          <div id="loading"><p class="texto_gameover">LOADING...</p></div>
-          <div id="gameover"><p class="texto_gameover">GAME OVER</p></div>
-          <div id="youWin"><p class="texto_gameover">1UP WINS</p></div>
+          <div id="loading0" class="loading-screen"><p class="texto_vintage">LOADING...</p></div>
+          <div id="loading1" class="loading-screen">
+            <p class="texto_vintage">LOADING...</p><
+          </div>
+          <div id="gameover"><p class="texto_vintage">GAME OVER</p></div>
+          <div id="youWin"><p class="texto_vintage">1UP WINS</p></div>
           <canvas id="sky" width="640" height="480"></canvas>
         </div>
       </div>
 
       <script type="text/javascript" src="js/jquery-3.4.0.slim.min.js"></script>
       <script type="text/javascript" src="js/fireworks.js"></script>
+      <script type="text/javascript" src="js/numberIterator.js"></script>
+      <script type="text/javascript" src="js/lifeMonitor.js"></script>
       <script type="text/javascript" src="js/game.js"></script>
 
     </body>

@@ -2,9 +2,18 @@
 @font-face { font-family: 'backto1982'; src: url('../fonts/backto1982.ttf');}
 @font-face { font-family: 'alterebro-pixel-font'; src: url('../fonts/alterebro-pixel-font.ttf');}
 
-@keyframes blink{
+@keyframes blink {
   0%{opacity: 0;}
   50%{opacity: .5;}
+  100%{opacity: 1;}
+}
+
+@keyframes blinkfast {
+  0%{opacity: 0;}
+  25%{opacity: .5;}
+  50%{opacity: 1;}
+  55%{opacity: 0;}
+  75%{opacity: .5;}
   100%{opacity: 1;}
 }
 
@@ -186,6 +195,11 @@ body {
 .text_warning_style{
   color: yellow;
   animation: blink 1s linear infinite;
+}
+
+.text_critical_style{
+  color: yellow;
+  animation: blinkfast 1s linear infinite;
 }
 
 .text_danger_style{
@@ -485,7 +499,7 @@ p.texto_avatar{
     top:100px;
 }
 
-p.texto_gameover{
+p.texto_vintage{
   font-family: 'backto1982';
   font-size: 4em;
   color: white;
