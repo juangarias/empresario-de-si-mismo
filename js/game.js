@@ -1,27 +1,9 @@
-const TIEMPO_TOTAL_JUEGO = 300000; /* 5 minutos */
-//const TIEMPO_ACCION = 15000; /* 15 segundos */
-//const TIEMPO_MULTI_ACCION = 25000; /* 25 segundos */
-const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
-//const TIEMPO_LOADING = 37600; /* 30 segundos */
-
-const ENERGY_BAR_START = 35;
-const ENERGY_BAR_MIN = 0;
-const ENERGY_BAR_WARN_LOW_CRITICAL = 11;
-const ENERGY_BAR_WARN_LOW = 22;
-const ENERGY_BAR_WARN_HIGH = 44;
-const ENERGY_BAR_WARN_HIGH_CRITICAL = 55;
-const ENERGY_BAR_MAX = 67;
-
-// Tiempos para DEBUG / DEVELOPMENT
-//const TIEMPO_TOTAL_JUEGO = 60000;
-const TIEMPO_ACCION = 2000;
-const TIEMPO_MULTI_ACCION = 4000;
-//const TIEMPO_CAMBIO_ACCION = 5000;
-const TIEMPO_LOADING = 2000;
-
 
 var lifeMonitor = new LifeMonitor(ENERGY_BAR_MIN, ENERGY_BAR_MAX, ENERGY_BAR_START);
 var loadingIdIterator = new ConsecutiveIdIterator("loading", 2);
+var gamepad = new Gamepad();
+var avatarNavigator = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
+var actionsNavigator;
 
 var tiempo, tiempoAccion, tiempoCambioAccion;
 var timer, timerAccion, timerCambioAccion;
@@ -29,59 +11,160 @@ var timer, timerAccion, timerCambioAccion;
 var nivel;
 var accionesElegidas;
 
+var effects = {};
+effects["comer"] = [-2,3,-1,4,-4,-2];
+effects["dormir"] = [-3,2,-1,3,3,-1];
+effects["trabajar"] = [2,-2,1,-3,3,4];
+effects["ocio"] = [-1,3,-1,1,2,-2];
+effects["entrenar"] = [-2,1,-1,-3,3,-2];
+effects["sexo"] = [-2,3,-1,-2,3,-1];
+effects["votar"] = [3,1,2,-1,1,0];
+effects["belleza"] = [-1,2,1,0,1,-4];
+
+var startButtonClicked = function() {
+  $("#startscreen").hide();
+  $("#avatarsmenu").show();
+  $(this).disabled;
+  gamepadSelectAvatar();
+};
+
+function gamepadShowMainScreen() {
+  gamepad.red = gamepad.blue = gamepad.yellow = gamepad.green = startButtonClicked;
+}
+
+function avatarLeft() {  
+  changeAvatarSelected(avatarNavigator.current(), avatarNavigator.previous());
+}
+
+function avatarRight() {
+  changeAvatarSelected(avatarNavigator.current(), avatarNavigator.next());
+}
+
+function changeAvatarSelected(oldAvatar, newAvatar) {
+  $("#" + oldAvatar).removeClass(oldAvatar + "-selected");
+  $("#" + newAvatar).addClass(newAvatar + "-selected");
+}
+
+function avatarClicked() {
+  showLoading(avatarNavigator.current() + "_audio");
+}
+
+var gamepadSelectAvatar = function() {
+  gamepad.red = gamepad.blue = gamepad.yellow = gamepad.green = avatarClicked;
+  gamepad.left = avatarLeft;
+  gamepad.right = avatarRight;
+}
+
 $(document).ready(function() {
   lifeMonitor.resetFactors();
   showMainScreen();
 });
 
-$("#start_button").click(function() {
-  $("#startscreen").hide();
-  $("#avatarsmenu").show();
-  $(this).disabled;
-});
+$("#start_button").click(startButtonClicked);
 
-$("#fitness").click(function() {showLoading("fitness_audio")});
-$("#payasa").click(function() {showLoading("payasa_audio")});
-$("#maga").click(function() {showLoading("maga_audio")});
-$("#vikinga").click(function() {showLoading("vikinga_audio")});
-$("#empresaria").click(function() {showLoading("empresaria_audio")});
-$("#hiphop").click(function() {showLoading("hiphop_audio")});
+$("#fitness").click(function() {avatarClicked("fitness")});
+$("#payasa").click(function() {avatarClicked("payasa")});
+$("#maga").click(function() {avatarClicked("maga")});
+$("#vikinga").click(function() {avatarClicked("vikinga")});
+$("#empresaria").click(function() {avatarClicked("empresaria")});
+$("#hiphop").click(function() {avatarClicked("hiphop")});
 
-$(".comer").click(function(){ $(this).addClass('comer-selected'); triggerAction(-2,3,-1,4,-4,-2, "comer_audio");});
-$(".dormir").click(function(){ $(this).addClass('dormir-selected'); triggerAction(-3,2,-1,3,3,-1, "dormir_audio");});
-$(".trabajar").click(function(){ $(this).addClass('trabajar-selected'); triggerAction(2,-2,1,-3,3,4, "trabajar_audio");});
-$(".ocio").click(function(){ $(this).addClass('ocio-selected'); triggerAction(-1,3,-1,1,2,-2, "ocio_audio");});
-$(".entrenar").click(function(){ $(this).addClass('entrenar-selected'); triggerAction(-2,1,-1,-3,3,-2, "entrenar_audio");});
-$(".sexo").click(function(){ $(this).addClass('sexo-selected'); triggerAction(-2,3,-1,-2,3,-1, "sexo_audio");});
-$(".votar").click(function(){ $(this).addClass('votar-selected'); triggerAction(3,1,2,-1,1,0, "votar_audio");});
-$(".belleza").click(function(){ $(this).addClass('belleza-selected'); triggerAction(-1,2,1,0,1,-4, "belleza_audio");});
+$(".comer").click(function(){ actionSelected("comer");});
+$(".dormir").click(function(){ actionSelected("dormir");});
+$(".trabajar").click(function(){ actionSelected("trabajar");});
+$(".ocio").click(function(){ actionSelected("ocio");});
+$(".entrenar").click(function(){ actionSelected("entrenar");});
+$(".sexo").click(function(){ actionSelected("sexo");});
+$(".votar").click(function(){ actionSelected("votar");});
+$(".belleza").click(function(){ actionSelected("belleza");});
+
+var showMainScreen = function() {
+  gamepadShowMainScreen();
+  hideMenu();
+  $("#avatarsmenu").hide();
+  $("#userdata_container").hide();
+  $("#youWin").hide();
+  $("#gameover").hide();
+  hideLoading();
+  $("#sky").hide();
+  $("#video").hide();
+  
+  var startText = gamepad.isConnected() ? "Jugador 1 Iniciar" : "Esperando control";
+  $("#start_button").text(startText);
+  $("#startscreen").show();
+};
+
+var showWinnerMessage = function() {
+  $("#video").hide();
+  $("#youWin").show();
+  $("#sky").show();
+  playSound("youwin_audio");
+  animate("#sky");
+};
+
+function actionSelected(action) {
+  var action = action || actionsNavigator.current();
+  if (typeof action === 'undefined') {
+    return;
+  }
+  var eff = effects[action];
+  var i = 0;
+
+  $(".contenedor." + action).addClass(action + '-selected');
+  triggerAction(eff[i++],eff[i++],eff[i++],eff[i++],eff[i++],eff[i++], action + "_audio");
+}
+
+function actionRight() {
+  changeActionSelected(actionsNavigator.current(), actionsNavigator.next());
+}
+
+function actionLeft() {
+  changeActionSelected(actionsNavigator.current(), actionsNavigator.previous());
+}
+
+function changeActionSelected(oldAction, newAction) {
+  $(".contenedor." + oldAction).removeClass(oldAction + "-selected");
+  $(".contenedor." + newAction).addClass(newAction + "-selected");
+}
+
+var gamepadActionsMenu = function() {
+  gamepad.red = gamepad.blue = gamepad.yellow = gamepad.green = actionSelected;
+  gamepad.left = actionLeft;
+  gamepad.right = actionRight;
+};
 
 var showMenu = function() {
+  gamepadActionsMenu();
   if (nivel == 1) {
+    actionsNavigator = new ArrayNavigator(["dormir", "trabajar"]);
     $("#actionsmenu1").show();
   } else if (nivel == 2) {
-      $("#actionsmenu2").show();
+    actionsNavigator = new ArrayNavigator(["dormir", "trabajar", "votar"]);
+    $("#actionsmenu2").show();
   } else if (nivel == 3) {
-      $("#actionsmenu3").show();
+    actionsNavigator = new ArrayNavigator(["comer", "dormir", "trabajar", "votar", "belleza"]);
+    $("#actionsmenu3").show();
   } else if (nivel == 4) {
-      $("#actionsmenu4").show();
+    actionsNavigator = new ArrayNavigator(["comer", "dormir", "trabajar", "entrenar", "sexo", "votar", "belleza"]);
+    $("#actionsmenu4").show();
   } else {
-      switch (nivel) {
-        case 5:
-          $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; tres acciones");
-          break;
-        case 6:
-          $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; dos acciones");
-          break;
-        case 7:
-          $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; tres acciones");
-          break;
-        case 8:
-          $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; cuatro acciones");
-          break;
-        default:
-      }
-      $("#actionsmenu5").show();
+    switch (nivel) {
+      case 5:
+        $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; tres acciones");
+        break;
+      case 6:
+        $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; dos acciones");
+        break;
+      case 7:
+        $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; tres acciones");
+        break;
+      case 8:
+        $("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; cuatro acciones");
+        break;
+      default:
+    }
+    actionsNavigator = new ArrayNavigator(["comer", "dormir", "trabajar", "ocio", "entrenar", "sexo", "votar", "belleza"]);
+    $("#actionsmenu5").show();
   }
 };
 
@@ -94,6 +177,7 @@ var hideLoading = function() {
 }
 
 var showLoading = function(avatarAudio) {
+  gamepad.clearEventHandlers();
   playSound(avatarAudio);
   playSound("loading_audio");
   $("#avatarsmenu").hide();
@@ -132,7 +216,35 @@ var setGameTimer = function() {
     }
     tiempo-=1000;
   }, 1000);
-}
+};
+
+var setChangeActionTimer = function() {
+  changeAction();
+  tiempoCambioAccion = TIEMPO_CAMBIO_ACCION
+  setChangeActionWarningText(formatSeconds(tiempoCambioAccion));
+
+  timerCambioAccion = setInterval(function() {
+    if (tiempoCambioAccion > 0) {
+      var seconds = formatSeconds(tiempoCambioAccion);
+      if (seconds <= 5 && seconds > 0) {
+        playSound("countdown_audio");
+      }
+      if (seconds < 10) {
+        seconds = "0"+seconds;
+      }
+    } else {
+      lifeMonitor.forceDie();
+      gameOver();
+    }
+
+    setChangeActionWarningText(seconds);
+    tiempoCambioAccion-=1000;
+  }, 1000);
+};
+
+var setChangeActionWarningText = function(seconds) {
+  $("#cambiar_escena_button p.texto_cambiar_escena").text(seconds);
+};
 
 var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew, audio) {
   playSound(audio);
@@ -198,35 +310,6 @@ var changeAction = function() {
   $("#startscreen").hide();
 };
 
-
-var setChangeActionTimer = function() {
-  changeAction();
-  tiempoCambioAccion = TIEMPO_CAMBIO_ACCION
-  setChangeActionWarningText(formatSeconds(tiempoCambioAccion));
-
-  timerCambioAccion = setInterval(function() {
-    if (tiempoCambioAccion > 0) {
-      var seconds = formatSeconds(tiempoCambioAccion);
-      if (seconds <= 5 && seconds > 0) {
-        playSound("countdown_audio");
-      }
-      if (seconds < 10) {
-        seconds = "0"+seconds;
-      }
-    } else {
-      lifeMonitor.forceDie();
-      gameOver();
-    }
-
-    setChangeActionWarningText(seconds);
-    tiempoCambioAccion-=1000;
-  }, 1000);
-};
-
-var setChangeActionWarningText = function(seconds) {
-  $("#cambiar_escena_button p.texto_cambiar_escena").text(seconds);
-}
-
 var formatSeconds = function(seconds) {
   return Math.floor(seconds  / 1000);
   //return Math.floor((seconds % (1000 * 60)) / 1000);
@@ -239,6 +322,8 @@ var playSound = function(audio) {
 };
 
 var gameOver = function() {
+  gamepad.clearEventHandlers();
+  
   if (lifeMonitor.isDead()) {
     playSound("gameover_audio");
     $("#gameover").show();
@@ -268,26 +353,6 @@ var resetGame = function() {
   clearInterval(timer);
   deselectActions();
   showMainScreen();
-};
-
-var showMainScreen = function() {
-  hideMenu();
-  $("#avatarsmenu").hide();
-  $("#userdata_container").hide();
-  $("#youWin").hide();
-  $("#gameover").hide();
-  hideLoading();
-  $("#sky").hide();
-  $("#video").hide();
-  $("#startscreen").show();
-};
-
-var showWinnerMessage = function() {
-  $("#video").hide();
-  $("#youWin").show();
-  $("#sky").show();
-  playSound("youwin_audio");
-  animate("#sky");
 };
 
 var updateBars = function() {

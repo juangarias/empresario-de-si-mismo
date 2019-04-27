@@ -244,7 +244,7 @@ div#actionsmenu1, div#actionsmenu2, div#actionsmenu3, div#actionsmenu4, div#acti
   height: 81px;
   background-repeat: no-repeat;
   background-position-x: center;
-  background-color: rgba(0,0,0,0.7);
+  background-color: rgba(0,0,0,0.9);
   border-radius: 8px;
   border: 6px solid #cdd2b4;
 }
@@ -380,28 +380,44 @@ p.texto{
 }
 
 .comer {background: url("../assets/actions_sprite.png") -4px,0px;}
-.comer:hover, .comer-selected {background: url("../assets/actions_sprite_over.png") -4px,0px;}
+.comer:hover,.comer-selected {
+  background: url("../assets/actions_sprite_over.png") -4px,0px;
+}
 
 .dormir {background: url("../assets/actions_sprite.png") -64px,0px;}
-.dormir:hover, .dormir-selected {background: url("../assets/actions_sprite_over.png") -64px,0px;}
+.dormir:hover,.dormir-selected {
+  background: url("../assets/actions_sprite_over.png") -64px,0px;
+}
 
 .trabajar {background: url("../assets/actions_sprite.png") -134px,0px;}
-.trabajar:hover, .trabajar-selected {background: url("../assets/actions_sprite_over.png") -134px,0px;}
+.trabajar:hover,.trabajar-selected {
+  background: url("../assets/actions_sprite_over.png") -134px,0px;
+}
 
 .ocio {background: url("../assets/actions_sprite.png") -202px,0px;}
-.ocio:hover, .ocio-selected {background: url("../assets/actions_sprite_over.png") -202px,0px;}
+.ocio:hover,.ocio-selected {
+  background: url("../assets/actions_sprite_over.png") -202px,0px;
+}
 
 .entrenar {background: url("../assets/actions_sprite.png") -265px,0px;}
-.entrenar:hover, .entrenar-selected {background: url("../assets/actions_sprite_over.png") -265px,0px;}
+.entrenar:hover,.entrenar-selected {
+  background: url("../assets/actions_sprite_over.png") -265px,0px;
+}
 
 .sexo {background: url("../assets/actions_sprite.png") -328px,0px;}
-.sexo:hover, .sexo-selected {background: url("../assets/actions_sprite_over.png") -328px,0px;}
+.sexo:hover,.sexo-selected {
+  background: url("../assets/actions_sprite_over.png") -328px,0px;
+}
 
 .votar {background: url("../assets/actions_sprite.png") -395px,0px;}
-.votar:hover, .votar-selected {background: url("../assets/actions_sprite_over.png") -395px,0px;}
+.votar:hover,.votar-selected {
+  background: url("../assets/actions_sprite_over.png") -395px,0px;
+}
 
 .belleza {background: url("../assets/actions_sprite.png") -460px,0px;}
-.belleza:hover, .belleza-selected {background: url("../assets/actions_sprite_over.png") -460px,0px;}
+.belleza:hover,.belleza-selected {
+  background: url("../assets/actions_sprite_over.png") -460px,0px;
+}
 
 /***** FIN ACTION MENU *****/
 
@@ -472,22 +488,34 @@ p.texto_avatar{
 }
 
 #fitness {background: url("../assets/avatars_sprite.png") -4px,0px;}
-#fitness:hover {background: url("../assets/avatars_sprite_over.png") -4px,0px;}
+#fitness:hover, .fitness-selected {
+  background: url("../assets/avatars_sprite_over.png") -4px,0px !important;
+}
 
 #payasa {background: url("../assets/avatars_sprite.png") -90px,0px;}
-#payasa:hover {background: url("../assets/avatars_sprite_over.png") -90px,0px;}
+#payasa:hover, .payasa-selected {
+  background: url("../assets/avatars_sprite_over.png") -90px,0px !important;
+}
 
 #maga {background: url("../assets/avatars_sprite.png") -168px,0px;}
-#maga:hover {background: url("../assets/avatars_sprite_over.png") -168px,0px;}
+#maga:hover, .maga-selected {
+  background: url("../assets/avatars_sprite_over.png") -168px,0px !important;
+}
 
 #vikinga {background: url("../assets/avatars_sprite.png") -244px,0px;}
-#vikinga:hover {background: url("../assets/avatars_sprite_over.png") -244px,0px;}
+#vikinga:hover, .vikinga-selected {
+  background: url("../assets/avatars_sprite_over.png") -244px,0px !important;
+}
 
 #empresaria {background: url("../assets/avatars_sprite.png") -325px,0px;}
-#empresaria:hover {background: url("../assets/avatars_sprite_over.png") -325px,0px;}
+#empresaria:hover, .empresaria-selected {
+  background: url("../assets/avatars_sprite_over.png") -325px,0px !important;
+}
 
 #hiphop {background: url("../assets/avatars_sprite.png") -406px,0px;}
-#hiphop:hover {background: url("../assets/avatars_sprite_over.png") -406px,0px;}
+#hiphop:hover, .hiphop-selected {
+  background: url("../assets/avatars_sprite_over.png") -406px,0px !important;
+}
 
 /***** FIN AVATAR MENU *****/
 
