@@ -1,3 +1,6 @@
+const DIRECTION_PUSH_THRESHOLD = 4;
+const BUTTON_PUSH_THRESHOLD = 40;
+
 const AXES_HORIZONTAL = 0;
 const AXES_VERTICAL = 1;
 
@@ -5,6 +8,10 @@ const BUTTON_BLUE = 0;
 const BUTTON_RED = 1;
 const BUTTON_YELLOW = 2;
 const BUTTON_GREEN = 3;
+const BUTTON_LEFT_SHOULDER = 4;
+const BUTTON_RIGHT_SHOULDER = 5;
+const BUTTON_SELECT = 8;
+const BUTTON_START = 9;
 
 function Gamepad() {
 
@@ -19,7 +26,6 @@ function Gamepad() {
 		window.webkitCancelRequestAnimationFrame;
 
 	this.connect = function(e) {
-		console.log(e.gamepad);
 		self.waitButtons();
 	};
 
@@ -27,8 +33,11 @@ function Gamepad() {
 		return button && button.pressed && button.value == 1.0;
 	};
 
-	this.hack = function(action) {
-		if (action != self.hackLast || self.hackCounter == 5) {
+	this.hackDirection = function(action) {return self.hack(action, DIRECTION_PUSH_THRESHOLD)};
+	this.hackButton = function(action) {return self.hack(action, BUTTON_PUSH_THRESHOLD)};
+
+	this.hack = function(action, maxVaule) {
+		if (action != self.hackLast || self.hackCounter == maxVaule) {
 			self.hackLast = action;
 			self.hackCounter = 0;
 			return true;
@@ -41,36 +50,51 @@ function Gamepad() {
 	this.waitButtons = function() {
 		var gamepad = self.getGamepad();
 
-		if (gamepad.axes[AXES_HORIZONTAL] == 1) {
-			if (self.hack("right")) {
+		if (self.buttonPressed(gamepad.buttons[BUTTON_START])) {
+			if (self.hackButton("start")) {
+				self.start();
+			}
+		} else if (self.buttonPressed(gamepad.buttons[BUTTON_LEFT_SHOULDER]) && 
+			self.buttonPressed(gamepad.buttons[BUTTON_RED])) {
+			if (self.hackButton("leftShoulderRed")) {
+				self.leftShoulderRed();
+			}
+		} else if (self.buttonPressed(gamepad.buttons[BUTTON_LEFT_SHOULDER]) && 
+			self.buttonPressed(gamepad.buttons[BUTTON_RIGHT_SHOULDER]) && 
+			self.buttonPressed(gamepad.buttons[BUTTON_YELLOW])) {
+			if (self.hackButton("bothShouldersYellow")) {
+				self.bothShouldersYellow();
+			}
+		} else if (gamepad.axes[AXES_HORIZONTAL] == 1) {
+			if (self.hackDirection("right")) {
 				self.right();
 			}
 		} else if (gamepad.axes[AXES_HORIZONTAL] == -1) {
-			if (self.hack("left")) {
+			if (self.hackDirection("left")) {
 				self.left();
 			}
 		} else if (gamepad.axes[AXES_VERTICAL] == -1) {
-			if (self.hack("up")) {
+			if (self.hackDirection("up")) {
 				self.up();
 			}
 		} else if (gamepad.axes[AXES_VERTICAL] == 1) {
-			if (self.hack("down")) {
+			if (self.hackDirection("down")) {
 				self.down();
 			}
 		} else if (self.buttonPressed(gamepad.buttons[BUTTON_RED])) {
-			if (self.hack("red")) {
+			if (self.hackButton("red")) {
 				self.red();
 			}
 		} else if (self.buttonPressed(gamepad.buttons[BUTTON_YELLOW])) {
-			if (self.hack("yellow")) {
+			if (self.hackButton("yellow")) {
 				self.yellow();
 			}
 		} else if (self.buttonPressed(gamepad.buttons[BUTTON_GREEN])) {
-			if (self.hack("green")) {
+			if (self.hackButton("green")) {
 				self.green();
 			}
 		} else if (self.buttonPressed(gamepad.buttons[BUTTON_BLUE])) {
-			if (self.hack("blue")) {
+			if (self.hackButton("blue")) {
 				self.blue();
 			}
 		}
@@ -96,15 +120,18 @@ function Gamepad() {
 	};
 
 	this.clearEventHandlers = function() {
-		self.up = function() {console.log("Dummy up")};
-		self.down = function() {console.log("Dummy down")};
-		self.left = function() {console.log("Dummy left")};
-		self.right = function() {console.log("Dummy right")};
+		self.up = function() {};//console.log("Dummy up")};
+		self.down = function() {};//console.log("Dummy down")};
+		self.left = function() {};//console.log("Dummy left")};
+		self.right = function() {};//console.log("Dummy right")};
 
-		self.red = function() {console.log("Dummy red")};
-		self.green = function() {console.log("Dummy green")};
-		self.yellow = function() {console.log("Dummy yellow")};
-		self.blue = function() {console.log("Dummy blue")};
+		self.red = function() {};//console.log("Dummy red")};
+		self.green = function() {};//console.log("Dummy green")};
+		self.yellow = function() {};//console.log("Dummy yellow")};
+		self.blue = function() {};//console.log("Dummy blue")};
+		self.start = function() {};//console.log("Dummy start")};
+		self.leftShoulderRed = function() {};//console.log("Dummy leftShoulderRed")};
+		self.bothShouldersYellow = function() {};//console.log("Dummy bothShouldersYellow")};
 	};
 
 	window.addEventListener("gamepadconnected", this.connect);

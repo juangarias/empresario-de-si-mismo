@@ -29,7 +29,8 @@ var startButtonClicked = function() {
 };
 
 function gamepadShowMainScreen() {
-  gamepad.red = gamepad.blue = gamepad.yellow = gamepad.green = startButtonClicked;
+  gamepad.clearEventHandlers();
+  gamepad.start = startButtonClicked;
 }
 
 function avatarLeft() {  
@@ -51,6 +52,7 @@ function avatarClicked(avatar) {
 }
 
 var gamepadSelectAvatar = function() {
+  gamepad.clearEventHandlers();
   gamepad.red = gamepad.blue = gamepad.yellow = gamepad.green = avatarClicked;
   gamepad.left = avatarLeft;
   gamepad.right = avatarRight;
@@ -95,14 +97,6 @@ var showMainScreen = function() {
   $("#startscreen").show();
 };
 
-var showWinnerMessage = function() {
-  $("#video").hide();
-  $("#youWin").show();
-  $("#sky").show();
-  playSound("youwin_audio");
-  animate("#sky");
-};
-
 function actionSelected(action) {
   var action = action || actionsNavigator.current();
   if (typeof action === 'undefined') {
@@ -128,10 +122,33 @@ function changeActionSelected(oldAction, newAction) {
   $(".contenedor." + newAction).addClass(newAction + "-selected");
 }
 
+var resetGame = function() {
+  $("#avatarsmenu").hide();
+  hideMenu();
+  clearInterval(timer);
+  clearInterval(timerAccion);
+  clearInterval(timerCambioAccion);
+
+  $("#ansiedad p").removeClass();
+  $("#felicidad p").removeClass();
+  $("#miedo p").removeClass();
+  $("#energia p").removeClass();
+  $("#hambre p").removeClass();
+  $("#dinero p").removeClass();
+
+  lifeMonitor.resetFactors();
+  updateBars();
+  clearInterval(timer);
+  deselectActions();
+  showMainScreen();
+};
+
 var gamepadActionsMenu = function() {
+  gamepad.clearEventHandlers();
   gamepad.red = gamepad.blue = gamepad.yellow = gamepad.green = actionSelected;
   gamepad.left = actionLeft;
   gamepad.right = actionRight;
+  gamepad.leftShoulderRed = resetGame;
 };
 
 var showMenu = function() {
@@ -175,32 +192,36 @@ var hideMenu = function() {
 
 var hideLoading = function() {
   $(".loading-screen").hide();
+  stopSound("loading_audio");
 }
 
+var startGame = function() {
+  hideLoading();
+  nivel = 1;
+  accionesElegidas = [];
+  
+  $("#video").show();
+  startGameTimer();
+  startChangeActionTimer();
+};
+
 var showLoading = function(avatarAudio) {
-  gamepad.clearEventHandlers();
   playSound(avatarAudio);
   playSound("loading_audio");
   $("#avatarsmenu").hide();
   $(loadingIdIterator.next()).show();
 
   var t = setInterval(function() {
-    hideLoading();
     startGame();
     clearInterval(t);
   }, TIEMPO_LOADING);
+
+  gamepad.clearEventHandlers();
+  gamepad.leftShoulderRed = function(){ clearInterval(t); resetGame()};
+  gamepad.bothShouldersYellow = function(){ clearInterval(t); startGame()};
 };
 
-var startGame = function() {
-  nivel = 1;
-  accionesElegidas = [];
-  
-  $("#video").show();
-  setGameTimer();
-  setChangeActionTimer();
-};
-
-var setGameTimer = function() {
+var startGameTimer = function() {
   tiempo = TIEMPO_TOTAL_JUEGO;
   timer = setInterval(function() {
     if (tiempo >= 0) {
@@ -219,7 +240,7 @@ var setGameTimer = function() {
   }, 1000);
 };
 
-var setChangeActionTimer = function() {
+var startChangeActionTimer = function() {
   changeAction();
   tiempoCambioAccion = TIEMPO_CAMBIO_ACCION
   setChangeActionWarningText(formatSeconds(tiempoCambioAccion));
@@ -247,18 +268,26 @@ var setChangeActionWarningText = function(seconds) {
   $("#cambiar_escena_button p.texto_cambiar_escena").text(seconds);
 };
 
+var actionAlreadyAdded = function(audio) {
+  return accionesElegidas.includes(audio);
+};
+
 var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew, audio) {
-  playSound(audio);
+  if (actionAlreadyAdded(audio)) {
+    return;
+  }
+
   accionesElegidas.push(audio);
+  playSound(audio);
+  lifeMonitor.cicle(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
+  updateBars();
+
   if (levelComplete()) {
     clearInterval(timerAccion);
     clearInterval(timerCambioAccion);
     deselectActions();
     hideMenu();
     setActionTimer();
-    
-    lifeMonitor.cicle(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
-    updateBars();
     
     nivel++;
     accionesElegidas = [];
@@ -296,7 +325,7 @@ var setActionTimer = function() {
         if(lifeMonitor.isDead()) {
           gameOver();
         } else {
-          setChangeActionTimer();
+          startChangeActionTimer();
         }
     }
     tiempoAccion-=1000;
@@ -322,6 +351,19 @@ var playSound = function(audio) {
   sound.play();
 };
 
+var stopSound = function(audio) {
+  var sound = document.getElementById(audio);
+  sound.pause();
+};
+
+var showWinnerMessage = function() {
+  $("#video").hide();
+  $("#youWin").show();
+  $("#sky").show();
+  playSound("youwin_audio");
+  animate("#sky");
+};
+
 var gameOver = function() {
   gamepad.clearEventHandlers();
   
@@ -331,29 +373,7 @@ var gameOver = function() {
   } else {
     showWinnerMessage();
   }
-
-  $("#avatarsmenu").hide();
-  hideMenu();
-  clearInterval(timer);
-  clearInterval(timerAccion);
-  clearInterval(timerCambioAccion)
-
   setTimeout(resetGame, 5000);
-};
-
-var resetGame = function() {
-  $("#ansiedad p").removeClass();
-  $("#felicidad p").removeClass();
-  $("#miedo p").removeClass();
-  $("#energia p").removeClass();
-  $("#hambre p").removeClass();
-  $("#dinero p").removeClass();
-
-  lifeMonitor.resetFactors();
-  updateBars();
-  clearInterval(timer);
-  deselectActions();
-  showMainScreen();
 };
 
 var updateBars = function() {
