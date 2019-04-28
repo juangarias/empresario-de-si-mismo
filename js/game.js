@@ -2,7 +2,7 @@
 var lifeMonitor = new LifeMonitor(ENERGY_BAR_MIN, ENERGY_BAR_MAX, ENERGY_BAR_START);
 var loadingIdIterator = new ConsecutiveIdIterator("loading", 2);
 var gamepad = new Gamepad();
-var avatarNavigator = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
+var avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
 var actionsNavigator;
 
 var tiempo, tiempoAccion, tiempoCambioAccion;
@@ -33,11 +33,11 @@ function gamepadShowMainScreen() {
 }
 
 function avatarLeft() {  
-  changeAvatarSelected(avatarNavigator.current(), avatarNavigator.previous());
+  changeAvatarSelected(avatarNav.current(), avatarNav.previous());
 }
 
 function avatarRight() {
-  changeAvatarSelected(avatarNavigator.current(), avatarNavigator.next());
+  changeAvatarSelected(avatarNav.current(), avatarNav.next());
 }
 
 function changeAvatarSelected(oldAvatar, newAvatar) {
@@ -45,8 +45,9 @@ function changeAvatarSelected(oldAvatar, newAvatar) {
   $("#" + newAvatar).addClass(newAvatar + "-selected");
 }
 
-function avatarClicked() {
-  showLoading(avatarNavigator.current() + "_audio");
+function avatarClicked(avatar) {
+  var avatar = avatar || avatarNav.current();
+  showLoading(avatar + "_audio");
 }
 
 var gamepadSelectAvatar = function() {
