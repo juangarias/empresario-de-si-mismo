@@ -14,11 +14,3 @@ const TIEMPO_ACCION = 15000; /* 15 segundos */
 const TIEMPO_MULTI_ACCION = 25000; /* 25 segundos */
 const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
 const TIEMPO_LOADING = 37600; /* 30 segundos */
-
-const ENERGY_BAR_START = 35;
-const ENERGY_BAR_MIN = 0;
-const ENERGY_BAR_WARN_LOW_CRITICAL = 11;
-const ENERGY_BAR_WARN_LOW = 22;
-const ENERGY_BAR_WARN_HIGH = 44;
-const ENERGY_BAR_WARN_HIGH_CRITICAL = 55;
-const ENERGY_BAR_MAX = 67;
