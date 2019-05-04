@@ -10,7 +10,7 @@ function LifeWindow() {
 
 	this.gamepad = new Gamepad();
 	this.avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
-	this.loadingIdIterator = new ConsecutiveIdIterator("loading", 2);
+	this.loadingIdIterator = new ConsecutiveIdIterator("#loading", 2);
 	var self = this;
 
 	this.startButtonClicked = function() {

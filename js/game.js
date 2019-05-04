@@ -5,7 +5,10 @@ var lifeMonitor;
 var lifeWindow;
 
 var nivel;
-var accionesElegidas;
+var accionesElegidas = [];
+var audiosAccionesElegidas = [];
+
+var audiosFrases;
 
 var effects = {};
 effects["comer"] = [-2,3,-1,4,-4,-2];
@@ -28,17 +31,27 @@ $(document).ready(function() {
   lifeWindow.onActionTriggered = onActionTriggered;
   lifeWindow.onResetGame = onResetGame;
   lifeWindow.showMainScreen();
-});
 
-var onHideLoading = function() {
-  stopSound("loading_audio");
-};
+  audiosFrases = {};
+  audiosFrases["comer_audio"] = new ConsecutiveIdIterator("comer_audio_frase", 3);
+  audiosFrases["dormir_audio"] = new ConsecutiveIdIterator("dormir_audio_frase", 1);
+  audiosFrases["trabajar_audio"] = new ConsecutiveIdIterator("trabajar_audio_frase", 2);
+  audiosFrases["ocio_audio"] = new ConsecutiveIdIterator("ocio_audio_frase", 1);
+  audiosFrases["entrenar_audio"] = new ConsecutiveIdIterator("entrenar_audio_frase", 4);
+  audiosFrases["sexo_audio"] = new ConsecutiveIdIterator("sexo_audio_frase", 4);
+  audiosFrases["votar_audio"] = new ConsecutiveIdIterator("votar_audio_frase", 4);
+  audiosFrases["belleza_audio"] = new ConsecutiveIdIterator("belleza_audio_frase", 4);
+});
 
 var onGameLoading = function(avatar) {
   avatarAudio = avatar  + "_audio";
   playSound(avatarAudio);
   playSound("loading_audio");
-}
+};
+
+var onHideLoading = function() {
+  stopSound("loading_audio");
+};
 
 var onGameStarted = function() {
   nivel = 1;
@@ -46,6 +59,21 @@ var onGameStarted = function() {
 
   startGameTimer();
   startChangeActionTimer();
+};
+
+var onActionTriggered = function(action) {
+  var eff = effects[action];
+  var i = 0;
+  triggerAction(eff[i++],eff[i++],eff[i++],eff[i++],eff[i++],eff[i++], action + "_audio");
+};
+
+var onResetGame = function() {
+  lifeMonitor.resetFactors();
+  updateBars();
+
+  clearInterval(timer);
+  clearInterval(timerAccion);
+  clearInterval(timerCambioAccion);
 };
 
 var startGameTimer = function() {
@@ -106,15 +134,8 @@ var setActionTimer = function() {
   }, 1000);
 };
 
-
 var calcularTiempoAccion = function() {
   return (nivel == 1 || nivel == 2 || nivel == 4) ? TIEMPO_ACCION : TIEMPO_MULTI_ACCION;
-}
-
-var onActionTriggered = function(action) {
-  var eff = effects[action];
-  var i = 0;
-  triggerAction(eff[i++],eff[i++],eff[i++],eff[i++],eff[i++],eff[i++], action + "_audio");
 }
 
 var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew, audio) {
@@ -124,10 +145,12 @@ var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, ha
 
   accionesElegidas.push(audio);
   playSound(audio);
+  audiosAccionesElegidas.push(audiosFrases[audio].next());
   lifeMonitor.cicle(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
   updateBars();
 
   if (levelComplete()) {
+    playActionSound();
     clearInterval(timerAccion);
     clearInterval(timerCambioAccion);
     lifeWindow.deselectActions();
@@ -150,23 +173,10 @@ var levelComplete = function() {
     ([8, 9 , 10].includes(nivel) && accionesElegidas.length == 4);
 };
 
-var onResetGame = function() {
-  lifeMonitor.resetGame();
-  
-  clearInterval(timer);
-  clearInterval(timerAccion);
-  clearInterval(timerCambioAccion);
-
-  lifeMonitor.resetFactors();
-  updateBars();
-  clearInterval(timer);
-};
-
 var updateBars = function() {
   lifeWindow.updateBars(lifeMonitor.getAnsiedad(), lifeMonitor.getFelicidad(), lifeMonitor.getMiedo(), 
     lifeMonitor.getEnergia(), lifeMonitor.getHambre(), lifeMonitor.getDinero());
 };
-
 
 var gameOver = function() {
   lifeWindow.gameOver();
@@ -184,12 +194,30 @@ var formatSeconds = function(seconds) {
   //return Math.floor((seconds % (1000 * 60)) / 1000);
 };
 
+var playActionSound = function() {
+  var audio = audiosAccionesElegidas.shift();
+  if (audio) {
+    playSound(audio);
+    $("#" + audio).on("ended", function() {
+      playActionSound();
+    });
+  }
+};
+
 var playSound = function(audio) {
   var sound = document.getElementById(audio);
-  sound.play();
+  if (sound) {
+    sound.play();
+  } else {
+    console.log("Audio no encontrado %s", audio);
+  }
 };
 
 var stopSound = function(audio) {
   var sound = document.getElementById(audio);
-  sound.pause();
+  if (sound) {
+    sound.pause();
+  } else {
+    console.log("Audio no encontrado %s", audio);
+  }
 };

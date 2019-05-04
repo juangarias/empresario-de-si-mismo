@@ -16,7 +16,7 @@ function ConsecutiveIdIterator(prefix, count) {
 	this.rangeIterator = new RangeIterator(count);
 
 	this.next = function() {
-		return "#" + this.prefix + this.rangeIterator.next();
+		return this.prefix + this.rangeIterator.next();
 	};
 
 }

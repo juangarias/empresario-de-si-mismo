@@ -29,8 +29,12 @@ function Gamepad() {
 		self.waitButtons();
 	};
 
-	this.buttonPressed = function(button) {
-		return button && button.pressed && button.value == 1.0;
+	this.buttonPressed = function(buttonIndex) {
+		var gamepad = self.getGamepad();
+		return gamepad && gamepad.buttons 
+			&& gamepad.buttons[buttonIndex] 
+			&& gamepad.buttons[buttonIndex].pressed 
+			&& gamepad.buttons[buttonIndex].value == 1.0;
 	};
 
 	this.hackDirection = function(action) {return self.hack(action, DIRECTION_PUSH_THRESHOLD)};
@@ -50,18 +54,18 @@ function Gamepad() {
 	this.waitButtons = function() {
 		var gamepad = self.getGamepad();
 
-		if (self.buttonPressed(gamepad.buttons[BUTTON_START])) {
+		if (self.buttonPressed(BUTTON_START)) {
 			if (self.hackButton("start")) {
 				self.start();
 			}
-		} else if (self.buttonPressed(gamepad.buttons[BUTTON_LEFT_SHOULDER]) && 
-			self.buttonPressed(gamepad.buttons[BUTTON_RED])) {
+		} else if (self.buttonPressed(BUTTON_LEFT_SHOULDER) && 
+			self.buttonPressed(BUTTON_RED)) {
 			if (self.hackButton("leftShoulderRed")) {
 				self.leftShoulderRed();
 			}
-		} else if (self.buttonPressed(gamepad.buttons[BUTTON_LEFT_SHOULDER]) && 
-			self.buttonPressed(gamepad.buttons[BUTTON_RIGHT_SHOULDER]) && 
-			self.buttonPressed(gamepad.buttons[BUTTON_YELLOW])) {
+		} else if (self.buttonPressed(BUTTON_LEFT_SHOULDER) && 
+			self.buttonPressed(BUTTON_RIGHT_SHOULDER) && 
+			self.buttonPressed(BUTTON_YELLOW)) {
 			if (self.hackButton("bothShouldersYellow")) {
 				self.bothShouldersYellow();
 			}
@@ -81,19 +85,19 @@ function Gamepad() {
 			if (self.hackDirection("down")) {
 				self.down();
 			}
-		} else if (self.buttonPressed(gamepad.buttons[BUTTON_RED])) {
+		} else if (self.buttonPressed(BUTTON_RED)) {
 			if (self.hackButton("red")) {
 				self.red();
 			}
-		} else if (self.buttonPressed(gamepad.buttons[BUTTON_YELLOW])) {
+		} else if (self.buttonPressed(BUTTON_YELLOW)) {
 			if (self.hackButton("yellow")) {
 				self.yellow();
 			}
-		} else if (self.buttonPressed(gamepad.buttons[BUTTON_GREEN])) {
+		} else if (self.buttonPressed(BUTTON_GREEN)) {
 			if (self.hackButton("green")) {
 				self.green();
 			}
-		} else if (self.buttonPressed(gamepad.buttons[BUTTON_BLUE])) {
+		} else if (self.buttonPressed(BUTTON_BLUE)) {
 			if (self.hackButton("blue")) {
 				self.blue();
 			}

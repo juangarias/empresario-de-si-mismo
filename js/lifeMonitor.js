@@ -22,13 +22,15 @@ function LifeMonitor(minValue, maxValue, initValue) {
 	};
 
 	this.cicle = function(deltaAnsiedad, deltaFelicidad, miedoNew, energiaNew, hambreNew, dineroNew) {
-		this.ansiedad = this.calculateNewFactorValue(this.ansiedad, deltaAnsiedad);
-		this.felicidad = this.calculateNewFactorValue(this.felicidad, deltaFelicidad);
-		this.miedo = this.calculateNewFactorValue(this.miedo, miedoNew);
-		this.energia = this.calculateNewFactorValue(this.energia, energiaNew);
-		this.hambre = this.calculateNewFactorValue(this.hambre, hambreNew);
-		this.dinero = this.calculateNewFactorValue(this.dinero, dineroNew);
-		this.dead = this.calculateIsDead();
+		if (!this.dead) {
+			this.ansiedad = this.calculateNewFactorValue(this.ansiedad, deltaAnsiedad);
+			this.felicidad = this.calculateNewFactorValue(this.felicidad, deltaFelicidad);
+			this.miedo = this.calculateNewFactorValue(this.miedo, miedoNew);
+			this.energia = this.calculateNewFactorValue(this.energia, energiaNew);
+			this.hambre = this.calculateNewFactorValue(this.hambre, hambreNew);
+			this.dinero = this.calculateNewFactorValue(this.dinero, dineroNew);
+		}
+		this.dead = this.dead || this.calculateIsDead();
 	};
 
 	this.calculateNewFactorValue = function(actual, delta) {
