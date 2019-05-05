@@ -44,8 +44,7 @@ $(document).ready(function() {
 });
 
 var onGameLoading = function(avatar) {
-  avatarAudio = avatar  + "_audio";
-  playSound(avatarAudio);
+  playSound(avatar + "_audio");
   playSound("loading_audio");
 };
 
@@ -59,6 +58,8 @@ var onGameStarted = function() {
 
   startGameTimer();
   startChangeActionTimer();
+  playSound("wonderboy");
+  $("#wonderboy").prop("volume", 0.4);
 };
 
 var onActionTriggered = function(action) {
@@ -71,6 +72,7 @@ var onResetGame = function() {
   lifeMonitor.resetFactors();
   updateBars();
 
+  stopSound("wonderboy");
   clearInterval(timer);
   clearInterval(timerAccion);
   clearInterval(timerCambioAccion);
@@ -144,7 +146,7 @@ var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, ha
   }
 
   accionesElegidas.push(audio);
-  playSound(audio);
+  playVoice(audio);
   audiosAccionesElegidas.push(audiosFrases[audio].next());
   lifeMonitor.cicle(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
   updateBars();
@@ -197,11 +199,17 @@ var formatSeconds = function(seconds) {
 var playActionSound = function() {
   var audio = audiosAccionesElegidas.shift();
   if (audio) {
-    playSound(audio);
-    $("#" + audio).on("ended", function() {
-      playActionSound();
-    });
+    playVoice(audio);
+    $("#" + audio).on("ended", playActionSound);
   }
+};
+
+var playVoice = function(voice) {
+  $("#wonderboy").prop("volume", 0.1);
+  playSound(voice);
+  $("#" + voice).on("ended", function() {
+    $("#wonderboy").prop("volume", 0.4);
+  });
 };
 
 var playSound = function(audio) {
