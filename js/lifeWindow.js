@@ -129,16 +129,16 @@ function LifeWindow() {
 		} else {
 			switch (nivel) {
 				case 5:
-				$("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; tres acciones");
+				$("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; <strong>TRES</strong> acciones");
 				break;
 				case 6:
-				$("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; dos acciones");
+				$("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; <strong>DOS</strong> acciones");
 				break;
 				case 7:
-				$("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; tres acciones");
+				$("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; <strong>TRES</strong> acciones");
 				break;
 				case 8:
-				$("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; cuatro acciones");
+				$("#actionsmenu5 #titulo_action p").html("Seleccion&aacute; <strong>CUATRO</strong> acciones");
 				break;
 				default:
 			}
