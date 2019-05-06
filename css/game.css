@@ -305,6 +305,11 @@ div#actionsmenu5 #titulo_action{
   text-align: center;
 }
 
+.cantidad_acciones {
+  font-weight: 10px;
+  animation: blink 1s linear infinite;
+}
+
 #cambiar_escena_button {
   border-radius: 8px;
 /*  border: 6px solid #cdd2b4; */
