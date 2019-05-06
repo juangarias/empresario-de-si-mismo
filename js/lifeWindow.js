@@ -209,6 +209,7 @@ function LifeWindow() {
 	};
 
 	this.gameOver = function() {
+		$("#gameover").show();
 		self.gamepad.clearEventHandlers();
 		setTimeout(self.resetGame, 5000);
 	};

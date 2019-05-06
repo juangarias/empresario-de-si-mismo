@@ -3,12 +3,10 @@ var timer, timerAccion, timerCambioAccion;
 
 var lifeMonitor;
 var lifeWindow;
+var audioManager;
 
 var nivel;
 var accionesElegidas = [];
-var audiosAccionesElegidas = [];
-
-var audiosFrases;
 
 var effects = {};
 effects["comer"] = [-2,3,-1,4,-4,-2];
@@ -21,6 +19,8 @@ effects["votar"] = [3,1,2,-1,1,0];
 effects["belleza"] = [-1,2,1,0,1,-4];
 
 $(document).ready(function() {
+  audioManager = new AudioManager();
+
   lifeMonitor = new LifeMonitor(ENERGY_BAR_MIN, ENERGY_BAR_MAX, ENERGY_BAR_START);
   lifeMonitor.resetFactors();
   
@@ -31,25 +31,14 @@ $(document).ready(function() {
   lifeWindow.onActionTriggered = onActionTriggered;
   lifeWindow.onResetGame = onResetGame;
   lifeWindow.showMainScreen();
-
-  audiosFrases = {};
-  audiosFrases["comer_audio"] = new ConsecutiveIdIterator("comer_audio_frase", 3);
-  audiosFrases["dormir_audio"] = new ConsecutiveIdIterator("dormir_audio_frase", 1);
-  audiosFrases["trabajar_audio"] = new ConsecutiveIdIterator("trabajar_audio_frase", 2);
-  audiosFrases["ocio_audio"] = new ConsecutiveIdIterator("ocio_audio_frase", 1);
-  audiosFrases["entrenar_audio"] = new ConsecutiveIdIterator("entrenar_audio_frase", 4);
-  audiosFrases["sexo_audio"] = new ConsecutiveIdIterator("sexo_audio_frase", 4);
-  audiosFrases["votar_audio"] = new ConsecutiveIdIterator("votar_audio_frase", 4);
-  audiosFrases["belleza_audio"] = new ConsecutiveIdIterator("belleza_audio_frase", 4);
 });
 
 var onGameLoading = function(avatar) {
-  playSound(avatar + "_audio");
-  playSound("loading_audio");
+  audioManager.avatarSelected(avatar);
 };
 
 var onHideLoading = function() {
-  stopSound("loading_audio");
+  audioManager.stopLoading();
 };
 
 var onGameStarted = function() {
@@ -58,21 +47,20 @@ var onGameStarted = function() {
 
   startGameTimer();
   startChangeActionTimer();
-  playSound("wonderboy");
-  $("#wonderboy").prop("volume", 0.4);
+  audioManager.playTheme();
 };
 
 var onActionTriggered = function(action) {
   var eff = effects[action];
   var i = 0;
-  triggerAction(eff[i++],eff[i++],eff[i++],eff[i++],eff[i++],eff[i++], action + "_audio");
+  triggerAction(eff[i++],eff[i++],eff[i++],eff[i++],eff[i++],eff[i++], action);
 };
 
 var onResetGame = function() {
+  audioManager.stopTheme();
   lifeMonitor.resetFactors();
   updateBars();
 
-  stopSound("wonderboy");
   clearInterval(timer);
   clearInterval(timerAccion);
   clearInterval(timerCambioAccion);
@@ -105,7 +93,7 @@ var startChangeActionTimer = function() {
     if (tiempoCambioAccion > 0) {
       var seconds = formatSeconds(tiempoCambioAccion);
       if (seconds <= 5 && seconds > 0) {
-        playSound("countdown_audio");
+        audioManager.warnCountdown();
       }
       if (seconds < 10) {
         seconds = "0"+seconds;
@@ -140,19 +128,18 @@ var calcularTiempoAccion = function() {
   return (nivel == 1 || nivel == 2 || nivel == 4) ? TIEMPO_ACCION : TIEMPO_MULTI_ACCION;
 }
 
-var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew, audio) {
-  if (actionAlreadyAdded(audio)) {
+var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew, action) {
+  if (actionAlreadyAdded(action)) {
     return;
   }
 
-  accionesElegidas.push(audio);
-  playVoice(audio);
-  audiosAccionesElegidas.push(audiosFrases[audio].next());
+  accionesElegidas.push(action);
+  audioManager.actionSelected(action);
   lifeMonitor.cicle(ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew);
   updateBars();
 
   if (levelComplete()) {
-    playActionSound();
+    audioManager.playActionSound();
     clearInterval(timerAccion);
     clearInterval(timerCambioAccion);
     lifeWindow.deselectActions();
@@ -181,51 +168,17 @@ var updateBars = function() {
 };
 
 var gameOver = function() {
+  audioManager.stopTheme();
   lifeWindow.gameOver();
   if (lifeMonitor.isDead()) {
-    playSound("gameover_audio");
-    $("#gameover").show();
+    audioManager.playGameOver();
   } else {
-    playSound("youwin_audio");
+    audioManager.playYouWin();
     lifeWindow.showWinnerMessage();
   }
 };
 
 var formatSeconds = function(seconds) {
   return Math.floor(seconds  / 1000);
-  //return Math.floor((seconds % (1000 * 60)) / 1000);
 };
 
-var playActionSound = function() {
-  var audio = audiosAccionesElegidas.shift();
-  if (audio) {
-    playVoice(audio);
-    $("#" + audio).on("ended", playActionSound);
-  }
-};
-
-var playVoice = function(voice) {
-  $("#wonderboy").prop("volume", 0.1);
-  playSound(voice);
-  $("#" + voice).on("ended", function() {
-    $("#wonderboy").prop("volume", 0.4);
-  });
-};
-
-var playSound = function(audio) {
-  var sound = document.getElementById(audio);
-  if (sound) {
-    sound.play();
-  } else {
-    console.log("Audio no encontrado %s", audio);
-  }
-};
-
-var stopSound = function(audio) {
-  var sound = document.getElementById(audio);
-  if (sound) {
-    sound.pause();
-  } else {
-    console.log("Audio no encontrado %s", audio);
-  }
-};
