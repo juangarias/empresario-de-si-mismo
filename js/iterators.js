@@ -24,27 +24,24 @@ function ConsecutiveIdIterator(prefix, count) {
 
 function ArrayNavigator(elements, startIndex) {
 
-  var startIndex = (typeof startIndex !== 'undefined') ? startIndex : -1;
   this.elements = elements;
-  this.index = startIndex;
+  this.index = (typeof startIndex !== 'undefined') ? startIndex : -1;
+  this.max = elements.length - 1;
 
   this.current = function() {
     return this.elements[this.index]; 
   };
 
   this.next = function() {
-    if (this.elements[this.index + 1]) {
-      this.index++;
-    }
+    this.index++;
+    this.index = this.index % this.max;
     return this.current();
   };
 
   this.previous = function() {
+    this.index--;
     if (this.index < 0) {
-      this.index = 0;
-    }
-    if (this.elements[this.index - 1]) {
-      this.index--;
+      this.index = this.max;
     }
     return this.current(); 
   };

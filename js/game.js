@@ -171,7 +171,7 @@ var gameOver = function() {
   audioManager.stopTheme();
   lifeWindow.gameOver();
   if (lifeMonitor.isDead()) {
-    audioManager.playGameOver();
+    audioManager.playGameover();
   } else {
     audioManager.playYouWin();
     lifeWindow.showWinnerMessage();
