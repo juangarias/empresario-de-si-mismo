@@ -6,8 +6,9 @@ const ENERGY_BAR_WARN_HIGH = 44;
 const ENERGY_BAR_WARN_HIGH_CRITICAL = 55;
 const ENERGY_BAR_MAX = 67;
 
-function LifeWindow() {
+function LifeWindow(audioManager) {
 
+	this.audioManager = audioManager;
 	this.gamepad = new Gamepad();
 	this.avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
 	this.loadingIdIterator = new ConsecutiveIdIterator("#loading", 2);
@@ -45,6 +46,7 @@ function LifeWindow() {
 	}
 
 	this.showMainScreen = function() {
+		self.audioManager.playWaitPlayer();
 		self.gamepadShowMainScreen();
 		self.hideMenu();
 		$("#avatarsmenu").hide();
@@ -53,7 +55,7 @@ function LifeWindow() {
 		$("#gameover").hide();
 		self.hideLoading();
 		$("#sky").hide();
-		$("#video").hide();
+		$("#video").show();
 
 		var startText = self.gamepad.isConnected() ? "Jugador 1 Iniciar" : "Esperando control";
 		$("#start_button").text(startText);
@@ -89,7 +91,7 @@ function LifeWindow() {
 	}
 
 	this.resetGame = function() {
-		self.onResetGame();
+		self.audioManager.silence();
 		$("#avatarsmenu").hide();
 		self.hideMenu();
 
@@ -151,19 +153,21 @@ function LifeWindow() {
 		$(".actionsmenu-screen").hide();
 	};
 
-	this.hideLoading = function() {
-		self.onHideLoading();
-		$(".loading-screen").hide();
-	};
-
 	this.startGame = function() {
 		self.onGameStarted();
+		self.audioManager.playTheme();
 		self.hideLoading();
 		$("#video").show();
 	};
 
+	this.hideLoading = function() {
+		audioManager.stopLoading();
+		$(".loading-screen").hide();
+	};
+
 	this.showLoading = function(avatar) {
-		self.onGameLoading(avatar);
+		self.audioManager.avatarSelected(avatar);
+		$("#video").hide();	
 		$("#avatarsmenu").hide();
 		$(self.loadingIdIterator.next()).show();
 
@@ -175,7 +179,7 @@ function LifeWindow() {
 		var t = setInterval(startGameAfterLoading, TIEMPO_LOADING);
 
 		self.gamepad.clearEventHandlers();
-		self.gamepad.leftShoulderRed = function(){ clearInterval(t); resetGame()};
+		self.gamepad.leftShoulderRed = function(){ clearInterval(t); self.resetGame()};
 		self.gamepad.bothShouldersYellow = startGameAfterLoading;
 	};
 
@@ -202,16 +206,16 @@ function LifeWindow() {
 	};
 
 	this.showWinnerMessage = function() {
-		$("#video").hide();
 		$("#youWin").show();
 		$("#sky").show();
 		animate("#sky");
+		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
 	};
 
 	this.gameOver = function() {
 		$("#gameover").show();
 		self.gamepad.clearEventHandlers();
-		setTimeout(self.resetGame, 5000);
+		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
 	};
 
 	this.updateBars = function(ansiedad,felicidad,miedo,energia,hambre,dinero) {
@@ -274,6 +278,5 @@ function LifeWindow() {
 	$(".sexo").click(function(){ self.actionSelected("sexo");});
 	$(".votar").click(function(){ self.actionSelected("votar");});
 	$(".belleza").click(function(){ self.actionSelected("belleza");});
-
 
 }

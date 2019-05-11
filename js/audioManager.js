@@ -1,6 +1,8 @@
 function AudioManager() {
 
 	this.currentTheme = "";
+	this.currentVoice = false;
+	this.playActionSoungInterval = false;
 	this.themesNav = new ConsecutiveIdIterator("theme", 4);
 	this.audiosAccionesElegidas = [];
 	this.audiosFrases = {};
@@ -14,6 +16,21 @@ function AudioManager() {
 	this.audiosFrases["belleza"] = new ConsecutiveIdIterator("belleza_audio_frase", 4);
 
 	var self = this;
+
+	this.silence = function() {
+		self.stopTheme();
+		if (self.currentVoice) {
+			self.stopSound(self.currentVoice);
+		}
+		clearInterval(self.playActionSoungInterval);
+	};
+
+	this.playWaitPlayer = function() {
+//		self.playSound("wait_player");
+//		$("#wait_player").on("ended", function() {
+//			self.playSound
+//		});
+	};
 
 	this.avatarSelected = function(avatar) {
 		self.playSound(avatar + "_audio");
@@ -63,8 +80,10 @@ function AudioManager() {
 	this.playVoice = function(voice) {
 		self.lowThemeVolume();
 		self.playSound(voice);
+		self.currentVoice = voice;
 		$("#" + voice).on("ended", function() {
 			self.resetThemeVolume();
+			self.currentVoice = false;
 		});
 	};
 
@@ -73,7 +92,7 @@ function AudioManager() {
 	};
 
 	this.playActionSound = function() {
-		var t = setInterval(function() {
+		self.playActionSoungInterval = setInterval(function() {
 			var audio = self.audiosAccionesElegidas.shift();
 	  		if (audio) {
 			    self.playVoice(audio);

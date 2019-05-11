@@ -24,6 +24,7 @@ body {
     background-repeat: no-repeat;
     width: 544px;
     color:white;
+    cursor:none;
 }
 
 #sarasa {
@@ -65,7 +66,7 @@ body {
 }
 
 #startscreen {
-  background-image:url("../assets/start_screen_low.jpg");
+  background-image:url("../assets/marco_start_screen_low.gif");
   position: absolute;
   width: 544px;
   height: 372px;;

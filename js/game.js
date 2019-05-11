@@ -24,22 +24,12 @@ $(document).ready(function() {
   lifeMonitor = new LifeMonitor(ENERGY_BAR_MIN, ENERGY_BAR_MAX, ENERGY_BAR_START);
   lifeMonitor.resetFactors();
   
-  lifeWindow = new LifeWindow();
-  lifeWindow.onGameLoading  = onGameLoading;
-  lifeWindow.onHideLoading = onHideLoading;
+  lifeWindow = new LifeWindow(audioManager);
   lifeWindow.onGameStarted = onGameStarted;
   lifeWindow.onActionTriggered = onActionTriggered;
   lifeWindow.onResetGame = onResetGame;
   lifeWindow.showMainScreen();
 });
-
-var onGameLoading = function(avatar) {
-  audioManager.avatarSelected(avatar);
-};
-
-var onHideLoading = function() {
-  audioManager.stopLoading();
-};
 
 var onGameStarted = function() {
   nivel = 1;
@@ -47,7 +37,6 @@ var onGameStarted = function() {
 
   startGameTimer();
   startChangeActionTimer();
-  audioManager.playTheme();
 };
 
 var onActionTriggered = function(action) {
@@ -56,14 +45,16 @@ var onActionTriggered = function(action) {
   triggerAction(eff[i++],eff[i++],eff[i++],eff[i++],eff[i++],eff[i++], action);
 };
 
-var onResetGame = function() {
-  audioManager.stopTheme();
-  lifeMonitor.resetFactors();
-  updateBars();
-
+var clearGameTimers = function() {
   clearInterval(timer);
   clearInterval(timerAccion);
   clearInterval(timerCambioAccion);
+};
+
+var onResetGame = function() {
+  lifeMonitor.resetFactors();
+  updateBars();
+  clearGameTimers();
 };
 
 var startGameTimer = function() {
@@ -168,9 +159,10 @@ var updateBars = function() {
 };
 
 var gameOver = function() {
-  audioManager.stopTheme();
-  lifeWindow.gameOver();
+  clearGameTimers();
+  audioManager.silence();
   if (lifeMonitor.isDead()) {
+    lifeWindow.gameOver();
     audioManager.playGameover();
   } else {
     audioManager.playYouWin();
