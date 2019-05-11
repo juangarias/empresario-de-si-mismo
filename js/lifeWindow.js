@@ -15,6 +15,7 @@ function LifeWindow(audioManager) {
 	var self = this;
 
 	this.startButtonClicked = function() {
+		audioManager.stopWaitPlayer();
 		$("#startscreen").hide();
 		$("#avatarsmenu").show();
 		self.gamepadSelectAvatar();
@@ -46,7 +47,7 @@ function LifeWindow(audioManager) {
 	}
 
 	this.showMainScreen = function() {
-		self.audioManager.playWaitPlayer();
+		//self.audioManager.playWaitPlayer();
 		self.gamepadShowMainScreen();
 		self.hideMenu();
 		$("#avatarsmenu").hide();
@@ -56,6 +57,7 @@ function LifeWindow(audioManager) {
 		self.hideLoading();
 		$("#sky").hide();
 		$("#video").show();
+		$("#video").css({"top": "48px"});
 
 		var startText = self.gamepad.isConnected() ? "Jugador 1 Iniciar" : "Esperando control";
 		$("#start_button").text(startText);
@@ -158,6 +160,7 @@ function LifeWindow(audioManager) {
 		self.audioManager.playTheme();
 		self.hideLoading();
 		$("#video").show();
+		$("#video").css({"top": "0px"});
 	};
 
 	this.hideLoading = function() {

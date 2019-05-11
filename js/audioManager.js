@@ -1,5 +1,6 @@
 function AudioManager() {
 
+	this.playingWaitPlayer = false;
 	this.currentTheme = "";
 	this.currentVoice = false;
 	this.playActionSoungInterval = false;
@@ -26,15 +27,26 @@ function AudioManager() {
 	};
 
 	this.playWaitPlayer = function() {
-//		self.playSound("wait_player");
-//		$("#wait_player").on("ended", function() {
-//			self.playSound
-//		});
+		self.playingWaitPlayer = true;
+		self.startWaitPlayerCycle();
+	};
+
+	this.startWaitPlayerCycle = function() {
+		if (self.playingWaitPlayer) {
+			self.playSound("wait_player");
+			$("#wait_player").on("ended", self.startWaitPlayerCycle);
+		}
+	};
+
+	this.stopWaitPlayer = function() {
+		self.playingWaitPlayer = false;
+		self.stopSound("wait_player");
 	};
 
 	this.avatarSelected = function(avatar) {
-		self.playSound(avatar + "_audio");
-  		self.playSound("loading_audio");
+		var audioAvatar = avatar + "_audio";
+		self.playSound(audioAvatar);
+		$("#" + audioAvatar).on("ended", function() {self.playSound("loading_audio")});
 	};
 
 	this.stopLoading = function() {
@@ -98,7 +110,7 @@ function AudioManager() {
 			    self.playVoice(audio);
 	    		$("#" + audio).on("ended", self.playActionSound);
 	  		}
-			clearInterval(t);
+			clearInterval(self.playActionSoungInterval);
 		}, 2000);
 	};
 

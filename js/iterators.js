@@ -26,7 +26,7 @@ function ArrayNavigator(elements, startIndex) {
 
   this.elements = elements;
   this.index = (typeof startIndex !== 'undefined') ? startIndex : -1;
-  this.max = elements.length - 1;
+  this.max = elements.length;
 
   this.current = function() {
     return this.elements[this.index]; 
@@ -41,7 +41,7 @@ function ArrayNavigator(elements, startIndex) {
   this.previous = function() {
     this.index--;
     if (this.index < 0) {
-      this.index = this.max;
+      this.index = this.max - 1;
     }
     return this.current(); 
   };

@@ -24,16 +24,17 @@ body {
     background-repeat: no-repeat;
     width: 544px;
     color:white;
-    cursor:none;
+    /*cursor:none;*/
 }
 
 #sarasa {
-    width: 642px;
-    height: 416px;
+    width: 98%;
+    height: 100%;
     top: 0px;
     left: 0px;
     position: absolute;
     background-color: black;
+    overflow: none;
 }
 
 #sky {
@@ -43,7 +44,7 @@ body {
 
 #screen {
     width: 544px;
-    height: 372px;
+    /*height: 372px;*/
     position: relative;
     margin: 0 auto;
     top: 23px;
@@ -66,7 +67,7 @@ body {
 }
 
 #startscreen {
-  background-image:url("../assets/marco_start_screen_low.gif");
+  background-image:url("../assets/marco_start_screen_low_no_icons.gif");
   position: absolute;
   width: 544px;
   height: 372px;;
