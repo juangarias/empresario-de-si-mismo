@@ -45,16 +45,10 @@ var onActionTriggered = function(action) {
   triggerAction(eff[i++],eff[i++],eff[i++],eff[i++],eff[i++],eff[i++], action);
 };
 
-var clearGameTimers = function() {
-  clearInterval(timer);
-  clearInterval(timerAccion);
-  clearInterval(timerCambioAccion);
-};
-
 var onResetGame = function() {
+  clearGameTimers();
   lifeMonitor.resetFactors();
   updateBars();
-  clearGameTimers();
 };
 
 var startGameTimer = function() {
@@ -99,7 +93,7 @@ var startChangeActionTimer = function() {
   }, 1000);
 };
 
-var setActionTimer = function() {
+var startActionTimer = function() {
   tiempoAccion = calcularTiempoAccion();
 
   timerAccion = setInterval(function() {
@@ -113,6 +107,12 @@ var setActionTimer = function() {
     }
     tiempoAccion-=1000;
   }, 1000);
+};
+
+var clearGameTimers = function() {
+  clearInterval(timer);
+  clearInterval(timerAccion);
+  clearInterval(timerCambioAccion);
 };
 
 var calcularTiempoAccion = function() {
@@ -135,7 +135,7 @@ var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, ha
     clearInterval(timerCambioAccion);
     lifeWindow.deselectActions();
     lifeWindow.hideMenu();
-    setActionTimer();
+    startActionTimer();
 
     nivel++;
     accionesElegidas = [];
@@ -163,9 +163,7 @@ var gameOver = function() {
   audioManager.silence();
   if (lifeMonitor.isDead()) {
     lifeWindow.gameOver();
-    audioManager.playGameover();
   } else {
-    audioManager.playYouWin();
     lifeWindow.showWinnerMessage();
   }
 };

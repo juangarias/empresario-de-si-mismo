@@ -12,6 +12,8 @@ function LifeWindow(audioManager) {
 	this.gamepad = new Gamepad();
 	this.avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
 	this.loadingIdIterator = new ConsecutiveIdIterator("#loading", 2);
+	this.resetGameTimer = false;
+	this.skyTimer = false;
 	var self = this;
 
 	this.startButtonClicked = function() {
@@ -47,7 +49,7 @@ function LifeWindow(audioManager) {
 	}
 
 	this.showMainScreen = function() {
-		//self.audioManager.playWaitPlayer();
+		self.audioManager.playWaitPlayer();
 		self.gamepadShowMainScreen();
 		self.hideMenu();
 		$("#avatarsmenu").hide();
@@ -93,6 +95,9 @@ function LifeWindow(audioManager) {
 	}
 
 	this.resetGame = function() {
+		self.onResetGame();
+		clearInterval(self.resetGameTimer);
+		clearInterval(self.skyTimer);
 		self.audioManager.silence();
 		$("#avatarsmenu").hide();
 		self.hideMenu();
@@ -209,16 +214,24 @@ function LifeWindow(audioManager) {
 	};
 
 	this.showWinnerMessage = function() {
+		audioManager.playYouWin();
 		$("#youWin").show();
+		self.skyTimer = setTimeout(self.showAnimatedSky, TIEMPO_GAME_OVER / 2);
+		self.resetGameTimer = setTimeout(self.resetGame, TIEMPO_GAME_OVER);
+	};
+
+	this.showAnimatedSky = function() {
+		$("#video").hide();
 		$("#sky").show();
 		animate("#sky");
-		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
+		clearInterval(self.skyTimer);
 	};
 
 	this.gameOver = function() {
+		audioManager.playGameover();
 		$("#gameover").show();
 		self.gamepad.clearEventHandlers();
-		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
+		self.resetGameTimer = setTimeout(self.resetGame, TIEMPO_GAME_OVER);
 	};
 
 	this.updateBars = function(ansiedad,felicidad,miedo,energia,hambre,dinero) {
@@ -263,6 +276,10 @@ function LifeWindow(audioManager) {
 		var seconds = seconds < 10 ? "0" + seconds : seconds;
 		$("#tiempo p.reloj").text(minutes+':'+seconds);
 	};
+
+	this.onGameStarted = function() {console.log("Dummy onGameStarted")};
+	this.onActionTriggered = function() {console.log("Dummy onActionTriggered")};
+	this.onResetGame = function() {console.log("Dummy onResetGame")};
 
 	$("#start_button").click(self.startButtonClicked);
 	

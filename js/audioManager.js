@@ -3,19 +3,20 @@ function AudioManager() {
 	this.playingWaitPlayer = false;
 	this.currentTheme = "";
 	this.currentVoice = false;
-	this.playActionSoungInterval = false;
+	this.currentGameoverSound = false;
+	this.playActionSoundInterval = false;
 	this.themesNav = new ConsecutiveIdIterator("theme", 4);
 	this.audiosAccionesElegidas = [];
 	this.audiosFrases = {};
 	this.audiosFrases["comer"] = new ConsecutiveIdIterator("comer_audio_frase", 3);
-	this.audiosFrases["dormir"] = new ConsecutiveIdIterator("dormir_audio_frase", 1);
+	this.audiosFrases["dormir"] = new ConsecutiveIdIterator("dormir_audio_frase", 3);
 	this.audiosFrases["trabajar"] = new ConsecutiveIdIterator("trabajar_audio_frase", 2);
 	this.audiosFrases["ocio"] = new ConsecutiveIdIterator("ocio_audio_frase", 1);
 	this.audiosFrases["entrenar"] = new ConsecutiveIdIterator("entrenar_audio_frase", 4);
 	this.audiosFrases["sexo"] = new ConsecutiveIdIterator("sexo_audio_frase", 4);
 	this.audiosFrases["votar"] = new ConsecutiveIdIterator("votar_audio_frase", 4);
 	this.audiosFrases["belleza"] = new ConsecutiveIdIterator("belleza_audio_frase", 4);
-
+	this.audiosGameover = new ConsecutiveIdIterator("gameover_audio", 4);
 	var self = this;
 
 	this.silence = function() {
@@ -23,19 +24,13 @@ function AudioManager() {
 		if (self.currentVoice) {
 			self.stopSound(self.currentVoice);
 		}
-		clearInterval(self.playActionSoungInterval);
+		self.stopGameover();
+		clearInterval(self.playActionSoundInterval);
 	};
 
 	this.playWaitPlayer = function() {
-		self.playingWaitPlayer = true;
-		self.startWaitPlayerCycle();
-	};
-
-	this.startWaitPlayerCycle = function() {
-		if (self.playingWaitPlayer) {
-			self.playSound("wait_player");
-			$("#wait_player").on("ended", self.startWaitPlayerCycle);
-		}
+		self.playSound("wait_player");
+		document.getElementById("wait_player").loop = true;
 	};
 
 	this.stopWaitPlayer = function() {
@@ -77,6 +72,15 @@ function AudioManager() {
 
 	this.playGameover = function() {
 		self.playSound("gameover_audio");
+		self.currentGameoverSound = self.audiosGameover.next();
+		self.playSound(self.currentGameoverSound);
+	};
+
+	this.stopGameover = function() {
+		if (self.currentGameoverSound) {
+			self.stopSound(self.currentGameoverSound);
+		}
+		self.currentGameoverSound = false;
 	};
 
 	this.playYouWin = function() {
@@ -84,6 +88,7 @@ function AudioManager() {
 	};
 
 	this.actionSelected = function(action) {
+		//console.log("actionSelected [%s]", action);
 		var voice = action + "_audio";
 		self.playVoice(voice);
 		self.addSelectedAction(action);
@@ -104,20 +109,28 @@ function AudioManager() {
 	};
 
 	this.playActionSound = function() {
-		self.playActionSoungInterval = setInterval(function() {
-			var audio = self.audiosAccionesElegidas.shift();
-	  		if (audio) {
-			    self.playVoice(audio);
-	    		$("#" + audio).on("ended", self.playActionSound);
-	  		}
-			clearInterval(self.playActionSoungInterval);
-		}, 2000);
+		console.log("playActionSound");
+		self.playActionSoundInterval = setInterval(self.playNextActionPhrase, 2000);
+	};
+
+	this.playNextActionPhrase = function() {
+		var audio = self.audiosAccionesElegidas.shift();
+		//console.log("playNextActionPhrase [%s] on interval [%s]", audio, self.playActionSoundInterval);
+  		if (audio) {
+    		$("#" + audio).bind("ended", self.playNextActionPhrase);
+		    self.playVoice(audio);
+  		}
+		clearInterval(self.playActionSoundInterval);
 	};
 
 	this.playSound = function(audio) {
 	  var sound = document.getElementById(audio);
 	  if (sound) {
-	    sound.play();
+	    try {
+	    	sound.play();
+	    } catch(e) {
+	    	console.log(e);
+	    }
 	  } else {
 	    console.log("Audio no encontrado %s", audio);
 	  }
@@ -127,6 +140,7 @@ function AudioManager() {
 	  var sound = document.getElementById(audio);
 	  if (sound) {
 	    sound.pause();
+	    sound.currentTime = 0;
 	  } else {
 	    console.log("Audio no encontrado %s", audio);
 	  }
