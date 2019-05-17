@@ -1,0 +1,96 @@
+body {
+    font-family: 'Press Start 2P', cursive;
+    font-size: 16px;
+    width: 100%;
+    height: 100%;
+    color:white;
+}
+
+#monitor {
+	height: 300px;
+	width: 300px;
+}
+
+div.wait {background-color: red;}
+
+div.play {background-color: green;}
+
+div.youWin {background-color: purple;}
+
+div.gameOver {background-color: black;}
+
+p.texto_avatar{
+  font-family: 'thinPixel';
+	font-size: 1.4em;
+	color:white;
+	text-align: center;
+  top: 44px;
+  position: relative;
+  text-transform: uppercase;
+}
+
+div.contenedor_avatar {
+	text-transform: uppercase;
+	font-size: 20px;
+	width: 62px;
+	height: 70px;
+	float: left;
+	margin-right: 10px;
+	margin-left: 10px;
+	position: relative;
+	top: 12px;
+	left: 0px;
+}
+
+#fitness,#payasa,#maga,#vikinga,#empresaria,#hiphop,{
+  width: 60px;
+  background-repeat: no-repeat;
+}
+
+#fitness {background: url("../assets/avatars_sprite.png") -4px,0px;}
+#payasa {background: url("../assets/avatars_sprite.png") -90px,0px;}
+#maga {background: url("../assets/avatars_sprite.png") -168px,0px;}
+#vikinga {background: url("../assets/avatars_sprite.png") -244px,0px;}
+#empresaria {background: url("../assets/avatars_sprite.png") -325px,0px;}
+#hiphop {background: url("../assets/avatars_sprite.png") -406px,0px;}
+
+
+#acciones {
+	float: right;
+	padding: 20px;
+}
+
+
+div.contenedor{
+	height: 40px;
+	margin-right: 8px;
+	margin-left: 10px;
+	position: relative;
+	top: 10px;
+	left: -40px;
+}
+
+p.texto{
+  	font-family: 'thinPixel';
+	font-size: 1.4em;
+	font-weight: bold;
+	color:white;
+	text-align: center;
+	top: 30px;
+	position: relative;
+	text-transform: uppercase;
+}
+
+.comer,.dormir,.trabajar,.ocio,.entrenar,.sexo,.votar,.belleza{
+	width: 46px;
+	background-repeat: no-repeat;
+}
+
+.comer {background: url("../assets/actions_sprite.png") -4px,0px;}
+.dormir {background: url("../assets/actions_sprite.png") -64px,0px;}
+.trabajar {background: url("../assets/actions_sprite.png") -134px,0px;}
+.ocio {background: url("../assets/actions_sprite.png") -202px,0px;}
+.entrenar {background: url("../assets/actions_sprite.png") -265px,0px;}
+.sexo {background: url("../assets/actions_sprite.png") -328px,0px;}
+.votar {background: url("../assets/actions_sprite.png") -395px,0px;}
+.belleza {background: url("../assets/actions_sprite.png") -460px,0px;}

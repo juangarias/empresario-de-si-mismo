@@ -8,6 +8,7 @@ const ENERGY_BAR_MAX = 67;
 
 function LifeWindow(audioManager) {
 
+	this.monitorWindow;
 	this.audioManager = audioManager;
 	this.gamepad = new Gamepad();
 	this.avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
@@ -49,6 +50,9 @@ function LifeWindow(audioManager) {
 	}
 
 	this.showMainScreen = function() {
+		self.monitorWindow = window.open("monitor.html", "monitorWindow", "");
+		var mt = setTimeout(function() {self.monitorWindow.wait(); clearInterval(mt)}, 3000);
+
 		self.audioManager.playWaitPlayer();
 		self.gamepadShowMainScreen();
 		self.hideMenu();
@@ -78,6 +82,7 @@ function LifeWindow(audioManager) {
 		}
 
 		$(".contenedor." + action).addClass(action + '-selected');
+		self.monitorWindow.action(action);
 		self.onActionTriggered(action);
 	}
 
@@ -174,6 +179,7 @@ function LifeWindow(audioManager) {
 	};
 
 	this.showLoading = function(avatar) {
+		self.monitorWindow.play(avatar);
 		self.audioManager.avatarSelected(avatar);
 		$("#video").hide();	
 		$("#avatarsmenu").hide();
@@ -208,12 +214,14 @@ function LifeWindow(audioManager) {
 
 	this.changeAction = function(nivel) {
 		self.showMenu(nivel);
+		self.monitorWindow.clearActions();
 		$("#userdata_container").show();
 		$("#gameover").hide();
 		$("#startscreen").hide();
 	};
 
 	this.showWinnerMessage = function() {
+		self.monitorWindow.youWin();
 		audioManager.playYouWin();
 		$("#youWin").show();
 		self.skyTimer = setTimeout(self.showAnimatedSky, TIEMPO_GAME_OVER / 2);
@@ -228,6 +236,7 @@ function LifeWindow(audioManager) {
 	};
 
 	this.gameOver = function() {
+		self.monitorWindow.gameOver();
 		audioManager.playGameover();
 		$("#gameover").show();
 		self.gamepad.clearEventHandlers();

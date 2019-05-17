@@ -2,7 +2,7 @@
 /* Tiempos para DEBUG / DEVELOPMENT  */
 /*===================================*/
 
-//const TIEMPO_TOTAL_JUEGO = 5000;
+//const TIEMPO_TOTAL_JUEGO = 10000;
 //const TIEMPO_ACCION = 2000;
 //const TIEMPO_MULTI_ACCION = 4000;
 //const TIEMPO_CAMBIO_ACCION = 5000;
