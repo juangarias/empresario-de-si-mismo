@@ -37,6 +37,12 @@ body {
     overflow: none;
 }
 
+#settings {
+  position: absolute;
+  top: -20px;
+  z-index: 10;
+}
+
 #sky {
   z-index: -1;
   position: absolute;
@@ -203,7 +209,7 @@ body {
 }
 
 .text_critical_style{
-  color: yellow;
+  color: orange;
   animation: blinkfast 1s linear infinite;
 }
 
@@ -572,4 +578,5 @@ p.texto_vintage_loading_help{
   font-family: 'Press Start 2P', cursive;
   font-size: 13px;
   margin: 0px 23px;
+  display: none;
 }

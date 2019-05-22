@@ -20,6 +20,8 @@ function AudioManager() {
 	var self = this;
 
 	this.silence = function() {
+		self.stopWaitPlayer();
+		self.stopLoading();
 		self.stopTheme();
 		if (self.currentVoice) {
 			self.stopSound(self.currentVoice);
@@ -29,13 +31,16 @@ function AudioManager() {
 	};
 
 	this.playWaitPlayer = function() {
+		self.playingWaitPlayer = true;
 		self.playSound("wait_player");
 		document.getElementById("wait_player").loop = true;
 	};
 
 	this.stopWaitPlayer = function() {
+		if (self.playingWaitPlayer) {
+			self.stopSound("wait_player");
+		}
 		self.playingWaitPlayer = false;
-		self.stopSound("wait_player");
 	};
 
 	this.avatarSelected = function(avatar) {
@@ -63,7 +68,9 @@ function AudioManager() {
 	};
 
 	this.stopTheme = function() {
-		self.stopSound(self.currentTheme);
+		if (self.currentTheme) {
+			self.stopSound(self.currentTheme);
+		}
 	};
 
 	this.warnCountdown = function() {

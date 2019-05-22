@@ -8,7 +8,7 @@ const ENERGY_BAR_MAX = 67;
 
 function LifeWindow(audioManager) {
 
-	this.monitorWindow;
+	this.monitorWindow = new DummyMonitor();
 	this.audioManager = audioManager;
 	this.gamepad = new Gamepad();
 	this.avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
@@ -48,8 +48,12 @@ function LifeWindow(audioManager) {
 	}
 
 	this.showMainScreen = function() {
-		self.monitorWindow = window.open("monitor.html", "monitorWindow", "");
-		var mt = setTimeout(function() {self.monitorWindow.wait(); clearInterval(mt)}, 3000);
+		if (SHOW_MONITOR) {
+			self.monitorWindow = window.open("monitor.html", "monitorWindow", "");
+			var mt = setTimeout(function() {self.monitorWindow.wait(); clearInterval(mt)}, 3000);
+		}
+
+		self.prepareSettings();
 
 		self.audioManager.playWaitPlayer();
 		self.gamepadShowMainScreen();
@@ -66,6 +70,23 @@ function LifeWindow(audioManager) {
 		var startText = self.gamepad.isConnected() ? "Jugador 1 Presione START" : "Esperando control";
 		$("#start_button").text(startText);
 		$("#startscreen").show();
+	};
+
+	this.prepareSettings = function() {
+		$("#mute").attr('checked', MUTE);
+		$("#mute").change(function() { 
+			MUTE = $(this).is(':checked');
+			if (MUTE) {
+				self.audioManager.silence();
+			}
+		});
+
+		if (DEBUG) {
+			$("#settings").show();
+		} else {
+			$("#settings").hide();
+		}
+
 	};
 
 	this.gamepadShowMainScreen = function () {
@@ -188,28 +209,30 @@ function LifeWindow(audioManager) {
 		self.gamepad.leftShoulderRed = self.resetGame;
 		self.gamepad.bothShouldersYellow = self.startGame;
 
-		var countDown = 30;
-		var help = [
-			"Us&aacute; las flechas para desplazarte por las opciones.",
-			"Eleg&iacute; las acciones con los botones de colores.",
-			"Cada acci&oacute;n afecta positiva o negativamente las barras de energ&iacute;a.<br>Si llegan a rojo, perdiste."
-		];
-		var helpIdx = 0;
+		self.countDown = 31;
+		self.helpIdx = 0;
+		self.updateLoadingCounter();
+	};
 
-		var x = setInterval(function() {
-			if (countDown % 10 == 0) {
-				$("#help").html(help[helpIdx]);
-				helpIdx++;
-			}
+	this.countDown;
+	this.helpIdx;
 
-			countDown--;
-			$("#loadingCountdown").text(countDown);
-			if (countDown == 0) {
-				clearInterval(x);
-				self.startGame();
-			}
-		}, 1166);
-};
+	this.updateLoadingCounter = function() {
+		//console.log('updateLoadingCounter');
+		if (self.countDown % 10 == 0) {
+			$(".texto_vintage_loading_help").hide();
+			$("#help" + self.helpIdx).show();
+			self.helpIdx++;
+		}
+
+		self.countDown--;
+		$("#loadingCountdown").text(self.countDown);
+		if (self.countDown == 0) {
+			self.startGame();
+		} else {
+			setTimeout(self.updateLoadingCounter, 1166);
+		}
+	};
 
 	this.setChangeActionWarningText = function(seconds) {
 		$("#cambiar_escena_button p.texto_cambiar_escena").text(seconds);

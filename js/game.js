@@ -11,7 +11,7 @@ var accionesElegidas = [];
 var effects = {};
 effects["comer"] = [-2,3,-1,4,-4,-2];
 effects["dormir"] = [-3,2,-1,3,3,-1];
-effects["trabajar"] = [2,-2,1,-3,3,4];
+effects["trabajar"] = [2,-2,1,-2,3,4];
 effects["ocio"] = [-1,3,-1,1,2,-2];
 effects["entrenar"] = [-2,1,-1,-3,3,-2];
 effects["sexo"] = [-2,3,-1,-2,3,-1];
@@ -171,4 +171,3 @@ var gameOver = function() {
 var formatSeconds = function(seconds) {
   return Math.floor(seconds  / 1000);
 };
-

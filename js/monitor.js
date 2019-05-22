@@ -1,3 +1,13 @@
+function DummyMonitor() {
+	this.wait = function() {};
+	this.play = function() {};
+	this.action = function() {};
+	this.clearActions = function() {};
+	this.youWin = function() {};
+	this.gameOver = function() {};
+	this.setMonitorClass = function() {};
+}
+
 
 function wait() {
 	setMonitorClass("wait");

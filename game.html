@@ -85,6 +85,9 @@
 
       <div id="sarasa" >
         <div id="screen">
+          <div id="settings">
+            <input type="checkbox" id="mute" />Mute
+          </div>
           <div id="video">
             <iframe id="feed" scrolling="no" src="http://192.168.0.24:8080/jsfs.html" frameborder="0" style="position: absolute;left: 25px;">
             </iframe>
@@ -170,10 +173,20 @@
           <div id="loading0" class="loading-screen">
             <p class="texto_vintage_loading">
               LOADING...<br>
-              <span class="texto_vintage_loading" id="loadingCountdown"></span> 
+              <span class="texto_vintage_loading" id="loadingCountdown"></span>
             </p>
             
-            <p class="texto_vintage_loading_help" id="help"></p>
+            <p id="help0" class="texto_vintage_loading_help">
+              Us&aacute; las flechas para desplazarte por las opciones.<br>
+            </p>
+            <p id="help1" class="texto_vintage_loading_help">
+              Eleg&iacute; las acciones con los botones de colores.<br>
+            </p>
+            <p id="help2" class="texto_vintage_loading_help">
+              Cada acci&oacute;n afecta positiva o negativamente las barras de energ&iacute;a.<br>
+              Si llegan a <span style="color: red">rojo</span>, perdiste.
+            </p>
+
           </div>
 
           <div id="gameover"><p class="texto_vintage">GAME OVER</p></div>
@@ -187,6 +200,7 @@
       <script type="text/javascript" src="js/constants.js"></script>
       <script type="text/javascript" src="js/iterators.js"></script>
       <script type="text/javascript" src="js/gamepad.js"></script>
+      <script type="text/javascript" src="js/monitor.js"></script>
       <script type="text/javascript" src="js/audioManager.js"></script>
       <script type="text/javascript" src="js/lifeMonitor.js"></script>
       <script type="text/javascript" src="js/lifeWindow.js"></script>
