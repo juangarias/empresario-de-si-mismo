@@ -74,13 +74,15 @@ body {
   height: 372px;;
   background-repeat: no-repeat;
 }
+
 #startscreen  p {
   top: 206px;
   position: absolute;
-  left: 133px;
+  left: 80px;
   color: white;
   text-shadow: 3px 3px 5px black;
   animation: blink 1s linear infinite;
+  text-align: center;
 }
 
 /***** INICIO USER DATA *****/
@@ -544,4 +546,30 @@ p.texto_vintage{
   position: relative;
   text-transform: uppercase;
   animation: blink 1s linear infinite;
+}
+
+p.texto_vintage_loading {
+  font-family: 'backto1982';
+  font-size: 2em;
+  color: white;
+  text-align: center;
+  top: -38px;
+  position: relative;
+  text-transform: uppercase;
+  animation: blink 1.16s linear infinite;
+  line-height: 50px;
+}
+
+p.texto_vintage_loading_help{
+  font-family: 'backto1982';
+  font-size: 1em;
+  color: white;
+  text-align: left;
+  top: -38px;
+  position: relative;
+  animation: blink 6.16s linear infinite;
+  line-height: 30px;
+  font-family: 'Press Start 2P', cursive;
+  font-size: 13px;
+  margin: 0px 23px;
 }

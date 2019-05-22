@@ -63,7 +63,7 @@ function LifeWindow(audioManager) {
 		$("#video").show();
 		$("#video").css({"top": "48px"});
 
-		var startText = self.gamepad.isConnected() ? "Jugador 1 Iniciar" : "Esperando control";
+		var startText = self.gamepad.isConnected() ? "Jugador 1 Presione START" : "Esperando control";
 		$("#start_button").text(startText);
 		$("#startscreen").show();
 	};
@@ -184,12 +184,32 @@ function LifeWindow(audioManager) {
 		$("#avatarsmenu").hide();
 		$(self.loadingIdIterator.next()).show();
 
-		setTimeout(self.startGame, TIEMPO_LOADING);
-
 		self.gamepad.clearEventHandlers();
-		self.gamepad.leftShoulderRed = function(){ clearInterval(t); self.resetGame()};
-		self.gamepad.bothShouldersYellow = startGameAfterLoading;
-	};
+		self.gamepad.leftShoulderRed = self.resetGame;
+		self.gamepad.bothShouldersYellow = self.startGame;
+
+		var countDown = 30;
+		var help = [
+			"Us&aacute; las flechas para desplazarte por las opciones.",
+			"Eleg&iacute; las acciones con los botones de colores.",
+			"Cada acci&oacute;n afecta positiva o negativamente las barras de energ&iacute;a.<br>Si llegan a rojo, perdiste."
+		];
+		var helpIdx = 0;
+
+		var x = setInterval(function() {
+			if (countDown % 10 == 0) {
+				$("#help").html(help[helpIdx]);
+				helpIdx++;
+			}
+
+			countDown--;
+			$("#loadingCountdown").text(countDown);
+			if (countDown == 0) {
+				clearInterval(x);
+				self.startGame();
+			}
+		}, 1166);
+};
 
 	this.setChangeActionWarningText = function(seconds) {
 		$("#cambiar_escena_button p.texto_cambiar_escena").text(seconds);
