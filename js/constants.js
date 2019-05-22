@@ -8,6 +8,7 @@
 //const TIEMPO_CAMBIO_ACCION = 5000;
 //const TIEMPO_LOADING = 2000;
 //const TIEMPO_GAME_OVER = 4000;
+//const MUTE = true;
 
 
 /*=======================*/
@@ -20,3 +21,4 @@ const TIEMPO_MULTI_ACCION = 25000; /* 25 segundos */
 const TIEMPO_CAMBIO_ACCION = 15000; /* 15 segundos */
 const TIEMPO_LOADING = 37600; /* 30 segundos */
 const TIEMPO_GAME_OVER = 37600; /* 30 segundos */
+const MUTE = false;

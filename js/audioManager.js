@@ -110,7 +110,7 @@ function AudioManager() {
 
 	this.playActionSound = function() {
 		console.log("playActionSound");
-		self.playActionSoundInterval = setInterval(self.playNextActionPhrase, 2000);
+		setTimeout(self.playNextActionPhrase, 2000);
 	};
 
 	this.playNextActionPhrase = function() {
@@ -120,20 +120,22 @@ function AudioManager() {
     		$("#" + audio).bind("ended", self.playNextActionPhrase);
 		    self.playVoice(audio);
   		}
-		clearInterval(self.playActionSoundInterval);
 	};
 
 	this.playSound = function(audio) {
-	  var sound = document.getElementById(audio);
-	  if (sound) {
-	    try {
-	    	sound.play();
-	    } catch(e) {
-	    	console.log(e);
-	    }
-	  } else {
-	    console.log("Audio no encontrado %s", audio);
-	  }
+		if (MUTE) {
+			return;
+		}
+		var sound = document.getElementById(audio);
+		if (sound) {
+			try {
+				sound.play();
+			} catch(e) {
+				console.log(e);
+			}
+		} else {
+			console.log("Audio no encontrado %s", audio);
+		}
 	};
 
 	this.stopSound = function(audio) {

@@ -12,9 +12,7 @@ function LifeWindow(audioManager) {
 	this.audioManager = audioManager;
 	this.gamepad = new Gamepad();
 	this.avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
-	this.loadingIdIterator = new ConsecutiveIdIterator("#loading", 2);
-	this.resetGameTimer = false;
-	this.skyTimer = false;
+	this.loadingIdIterator = new ConsecutiveIdIterator("#loading", 1);
 	var self = this;
 
 	this.startButtonClicked = function() {
@@ -100,6 +98,7 @@ function LifeWindow(audioManager) {
 	}
 
 	this.resetGame = function() {
+		console.log("resetGame");
 		self.onResetGame();
 		clearInterval(self.resetGameTimer);
 		clearInterval(self.skyTimer);
@@ -185,12 +184,7 @@ function LifeWindow(audioManager) {
 		$("#avatarsmenu").hide();
 		$(self.loadingIdIterator.next()).show();
 
-		var startGameAfterLoading = function() {
-			self.startGame();
-			clearInterval(t);
-		};
-
-		var t = setInterval(startGameAfterLoading, TIEMPO_LOADING);
+		setTimeout(self.startGame, TIEMPO_LOADING);
 
 		self.gamepad.clearEventHandlers();
 		self.gamepad.leftShoulderRed = function(){ clearInterval(t); self.resetGame()};
@@ -224,15 +218,14 @@ function LifeWindow(audioManager) {
 		self.monitorWindow.youWin();
 		audioManager.playYouWin();
 		$("#youWin").show();
-		self.skyTimer = setTimeout(self.showAnimatedSky, TIEMPO_GAME_OVER / 2);
-		self.resetGameTimer = setTimeout(self.resetGame, TIEMPO_GAME_OVER);
+		setTimeout(self.showAnimatedSky, TIEMPO_GAME_OVER / 2);
+		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
 	};
 
 	this.showAnimatedSky = function() {
 		$("#video").hide();
 		$("#sky").show();
 		animate("#sky");
-		clearInterval(self.skyTimer);
 	};
 
 	this.gameOver = function() {
@@ -240,7 +233,7 @@ function LifeWindow(audioManager) {
 		audioManager.playGameover();
 		$("#gameover").show();
 		self.gamepad.clearEventHandlers();
-		self.resetGameTimer = setTimeout(self.resetGame, TIEMPO_GAME_OVER);
+		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
 	};
 
 	this.updateBars = function(ansiedad,felicidad,miedo,energia,hambre,dinero) {
