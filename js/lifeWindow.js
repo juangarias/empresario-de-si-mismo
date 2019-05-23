@@ -92,6 +92,7 @@ function LifeWindow(audioManager) {
 	this.gamepadShowMainScreen = function () {
 		self.gamepad.clearEventHandlers();
 		self.gamepad.start = self.startButtonClicked;
+		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.startButtonClicked;
 	}
 
 	this.actionSelected = function (action) {
