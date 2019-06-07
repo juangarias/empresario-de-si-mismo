@@ -13,6 +13,7 @@ function LifeWindow(audioManager) {
 	this.gamepad = new Gamepad();
 	this.avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
 	this.loadingIdIterator = new ConsecutiveIdIterator("#loading", 1);
+	this.loadingTimer = false;
 	var self = this;
 
 	this.startButtonClicked = function() {
@@ -67,7 +68,7 @@ function LifeWindow(audioManager) {
 		$("#video").show();
 		$("#video").css({"top": "48px"});
 
-		var startText = self.gamepad.isConnected() ? "Jugador 1 Presione START" : "Esperando control";
+		var startText = self.gamepad.isConnected() ? "Presione cualquier botón" : "Esperando control";
 		$("#start_button").text(startText);
 		$("#startscreen").show();
 	};
@@ -120,10 +121,9 @@ function LifeWindow(audioManager) {
 	}
 
 	this.resetGame = function() {
-		console.log("resetGame");
+		//console.log("resetGame");
+		self.resetLoadingTimer();
 		self.onResetGame();
-		clearInterval(self.resetGameTimer);
-		clearInterval(self.skyTimer);
 		self.audioManager.silence();
 		$("#avatarsmenu").hide();
 		self.hideMenu();
@@ -188,10 +188,23 @@ function LifeWindow(audioManager) {
 
 	this.startGame = function() {
 		self.onGameStarted();
+		self.resetLoadingTimer();
 		self.audioManager.playTheme();
 		self.hideLoading();
 		$("#video").show();
 		$("#video").css({"top": "0px"});
+	};
+
+	this.countDown;
+	this.helpIdx;
+
+	this.resetLoadingTimer = function() {
+		if (self.loadingTimer) {
+			clearTimeout(self.loadingTimer);
+		}
+		self.loadingTimer = false;
+		self.countDown = 31;
+		self.helpIdx = 0;
 	};
 
 	this.hideLoading = function() {
@@ -210,13 +223,9 @@ function LifeWindow(audioManager) {
 		self.gamepad.leftShoulderRed = self.resetGame;
 		self.gamepad.bothShouldersYellow = self.startGame;
 
-		self.countDown = 31;
-		self.helpIdx = 0;
+		self.resetLoadingTimer();
 		self.updateLoadingCounter();
 	};
-
-	this.countDown;
-	this.helpIdx;
 
 	this.updateLoadingCounter = function() {
 		//console.log('updateLoadingCounter');
@@ -231,7 +240,7 @@ function LifeWindow(audioManager) {
 		if (self.countDown == 0) {
 			self.startGame();
 		} else {
-			setTimeout(self.updateLoadingCounter, 1166);
+			self.loadingTimer = setTimeout(self.updateLoadingCounter, 1166);
 		}
 	};
 
@@ -345,4 +354,6 @@ function LifeWindow(audioManager) {
 	$(".votar").click(function(){ self.actionSelected("votar");});
 	$(".belleza").click(function(){ self.actionSelected("belleza");});
 
+	$("#skipLoading").click(self.startGame);
+	$("#resetGame").click(self.resetGame);
 }
