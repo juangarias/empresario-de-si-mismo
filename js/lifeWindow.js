@@ -84,8 +84,10 @@ function LifeWindow(audioManager) {
 
 		if (DEBUG) {
 			$("#settings").show();
+			$("body").css("cursor", "normal");
 		} else {
 			$("#settings").hide();
+			$("body").css("cursor", "none");
 		}
 
 	};

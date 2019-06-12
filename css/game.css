@@ -24,7 +24,6 @@ body {
     background-repeat: no-repeat;
     width: 544px;
     color:white;
-    cursor:none;
 }
 
 #sarasa {
@@ -294,8 +293,10 @@ div#actionsmenu2 #titulo_action{
   left: -23px;
 }
 div#actionsmenu3 #titulo_action{
-  left: 34px;
-  width: 221px;
+  width: 300px;
+  height: 37px;
+  top: -75px;
+  left: -6px;
 }
 div#actionsmenu4 #titulo_action{
   left: 108px;
