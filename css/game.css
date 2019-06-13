@@ -275,6 +275,20 @@ div#actionsmenu5{
   width: 520px;
 }
 
+.warning_messages {
+  border-radius: 8px;
+  border: 6px solid #CDD2B4;
+  padding: 10px;
+  width: 515px;
+  height: 10px;
+  position: absolute;
+  top: 236px;
+  font-size: 11px;
+  line-height: 10px;
+  left: 6px;
+  display: none;
+}
+
 #titulo_action {
   border-radius: 8px;
   border: 6px solid #cdd2b4;

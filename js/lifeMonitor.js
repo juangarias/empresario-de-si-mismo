@@ -68,5 +68,5 @@ function LifeMonitor(minValue, maxValue, initValue) {
 
 	this.forceDie = function() {
 		this.dead = true;
-	}
+	};
 }

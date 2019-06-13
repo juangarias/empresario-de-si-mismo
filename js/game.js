@@ -134,6 +134,9 @@ var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, ha
     audioManager.playActionSound();
     clearInterval(timerAccion);
     clearInterval(timerCambioAccion);
+    if (!lifeMonitor.isDead()) {
+      lifeWindow.showWarnings();
+    }
     lifeWindow.deselectActions();
     lifeWindow.hideMenu();
     startActionTimer();

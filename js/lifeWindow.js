@@ -14,6 +14,8 @@ function LifeWindow(audioManager) {
 	this.avatarNav = new ArrayNavigator(["fitness","payasa","maga","vikinga","empresaria","hiphop"], 0);
 	this.loadingIdIterator = new ConsecutiveIdIterator("#loading", 1);
 	this.loadingTimer = false;
+	this.energyHighWarningCount = 0;
+	this.energyLowWarningCount = 0;
 	var self = this;
 
 	this.startButtonClicked = function() {
@@ -292,6 +294,7 @@ function LifeWindow(audioManager) {
 	};
 
 	this.updateBars = function(ansiedad,felicidad,miedo,energia,hambre,dinero) {
+		self.energyHighWarningCount = self.energyLowWarningCount = 0;
 		self.updateStyleLessBetter(ansiedad, "#ansiedad p");
 		self.updateStyleMoreBetter(felicidad, "#felicidad p");
 		self.updateStyleLessBetter(miedo, "#value p");
@@ -313,8 +316,10 @@ function LifeWindow(audioManager) {
 			$(idBar).addClass("text_danger_style");
 		} else if (value < ENERGY_BAR_WARN_LOW_CRITICAL) {
 			$(idBar).addClass("text_critical_style");
+			self.energyLowWarningCount++;
 		} else if (value < ENERGY_BAR_WARN_LOW) {
 			$(idBar).addClass("text_warning_style");
+			self.energyLowWarningCount++;
 		}
 	};
 
@@ -324,14 +329,46 @@ function LifeWindow(audioManager) {
 			$(idBar).addClass("text_danger_style");
 		} else if (value > ENERGY_BAR_WARN_HIGH_CRITICAL) {
 			$(idBar).addClass("text_critical_style");
+			self.energyHighWarningCount++;
 		} else if (value > ENERGY_BAR_WARN_HIGH) {
 			$(idBar).addClass("text_warning_style");
+			self.energyHighWarningCount++;
 		}
 	};
 
 	this.updateTimerSeconds = function(minutes, seconds) {
 		var seconds = seconds < 10 ? "0" + seconds : seconds;
 		$("#tiempo p.reloj").text(minutes+':'+seconds);
+	};
+
+	this.hasEnergyLowWarning = function() {
+		return self.energyLowWarningCount > 0;
+	};
+
+	this.hasEnergyHighWarning = function() {
+		return self.energyHighWarningCount > 0;
+	};
+
+	this.totalEnergyWarning = function() {
+		return self.energyLowWarningCount + self.energyHighWarningCount;
+	};
+
+	this.showWarnings = function() {
+		if (self.hasEnergyLowWarning() || self.hasEnergyHighWarning()) {
+			var html = "";
+			if (self.totalEnergyWarning() > 1) {
+				html = "<div>&iexcl;Cuidado! Algunos valores est&aacute;n en peligro</div>";
+			} else {
+				html = "<div>&iexcl;Cuidado! Un valor est&aacute; en peligro</div>";
+			}
+			$("#warningMessages").html(html);
+			$("#warningMessages").show();
+			setTimeout(self.hideWarnings, 7000);
+		}
+	};
+
+	this.hideWarnings = function() {
+		$("#warningMessages").hide();
 	};
 
 	this.onGameStarted = function() {console.log("Dummy onGameStarted")};
