@@ -137,7 +137,6 @@ var triggerAction = function(ansiedadNew, felicidadNew, miedoNew, energiaNew, ha
     if (!lifeMonitor.isDead()) {
       lifeWindow.showWarnings();
     }
-    lifeWindow.deselectActions();
     lifeWindow.hideMenu();
     startActionTimer();
 

@@ -18,38 +18,6 @@ function LifeWindow(audioManager) {
 	this.energyLowWarningCount = 0;
 	var self = this;
 
-	this.startButtonClicked = function() {
-		audioManager.stopWaitPlayer();
-		$("#startscreen").hide();
-		$("#avatarsmenu").show();
-		self.gamepadSelectAvatar();
-	};
-
-	this.gamepadSelectAvatar = function() {
-		self.gamepad.clearEventHandlers();
-		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.avatarClicked;
-		self.gamepad.left = self.avatarLeft;
-		self.gamepad.right = self.avatarRight;
-	}
-
-	this.avatarLeft = function () {  
-		self.changeAvatarSelected(self.avatarNav.current(), self.avatarNav.previous());
-	}
-
-	this.avatarRight = function () {
-		self.changeAvatarSelected(self.avatarNav.current(), self.avatarNav.next());
-	}
-
-	this.changeAvatarSelected = function (oldAvatar, newAvatar) {
-		$("#" + oldAvatar).removeClass(oldAvatar + "-selected");
-		$("#" + newAvatar).addClass(newAvatar + "-selected");
-	}
-
-	this.avatarClicked = function (avatar) {
-		var avatar = avatar || self.avatarNav.current();
-		self.showLoading(avatar);
-	}
-
 	this.showMainScreen = function() {
 		if (SHOW_MONITOR) {
 			self.monitorWindow = window.open("monitor.html", "monitorWindow", "");
@@ -91,7 +59,6 @@ function LifeWindow(audioManager) {
 			$("#settings").hide();
 			$("body").css("cursor", "none");
 		}
-
 	};
 
 	this.gamepadShowMainScreen = function () {
@@ -100,47 +67,102 @@ function LifeWindow(audioManager) {
 		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.startButtonClicked;
 	}
 
-	this.actionSelected = function (action) {
-		var action = action || self.actionsNavigator.current();
-		if (typeof action === 'undefined') {
-			return;
+	this.startButtonClicked = function() {
+		audioManager.stopWaitPlayer();
+		$("#startscreen").hide();
+		$("#avatarsmenu").show();
+		self.gamepadSelectAvatar();
+	};
+
+	this.gamepadSelectAvatar = function() {
+		self.gamepad.clearEventHandlers();
+		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.avatarClicked;
+		self.gamepad.left = self.avatarLeft;
+		self.gamepad.right = self.avatarRight;
+	}
+
+	this.avatarLeft = function () {  
+		self.changeAvatarSelected(self.avatarNav.current(), self.avatarNav.previous());
+	}
+
+	this.avatarRight = function () {
+		self.changeAvatarSelected(self.avatarNav.current(), self.avatarNav.next());
+	}
+
+	this.changeAvatarSelected = function (oldAvatar, newAvatar) {
+		$("#" + oldAvatar).removeClass(oldAvatar + "-selected");
+		$("#" + newAvatar).addClass(newAvatar + "-selected");
+	}
+
+	this.avatarClicked = function (avatar) {
+		var avatar = avatar || self.avatarNav.current();
+		self.showLoading(avatar);
+	}
+
+	this.showLoading = function(avatar) {
+		self.monitorWindow.play(avatar);
+		self.audioManager.avatarSelected(avatar);
+		$("#video").hide();	
+		$("#avatarsmenu").hide();
+		$(self.loadingIdIterator.next()).show();
+
+		self.gamepad.clearEventHandlers();
+		self.gamepad.leftShoulderRed = self.resetGame;
+		self.gamepad.bothShouldersYellow = self.startGame;
+
+		self.resetLoadingTimer();
+		self.updateLoadingCounter();
+	};
+
+	this.countDown;
+	this.helpIdx;
+
+	this.resetLoadingTimer = function() {
+		if (self.loadingTimer) {
+			clearTimeout(self.loadingTimer);
+		}
+		self.loadingTimer = false;
+		self.countDown = 31;
+		self.helpIdx = 0;
+	};
+
+	this.hideLoading = function() {
+		audioManager.stopLoading();
+		$(".loading-screen").hide();
+	};
+
+	this.updateLoadingCounter = function() {
+		//console.log('updateLoadingCounter');
+		if (self.countDown % 10 == 0) {
+			$(".texto_vintage_loading_help").hide();
+			$("#help" + self.helpIdx).show();
+			self.helpIdx++;
 		}
 
-		$(".contenedor." + action).addClass(action + '-selected');
-		self.monitorWindow.action(action);
-		self.onActionTriggered(action);
-	}
+		self.countDown--;
+		$("#loadingCountdown").text(self.countDown);
+		if (self.countDown == 0) {
+			self.startGame();
+		} else {
+			self.loadingTimer = setTimeout(self.updateLoadingCounter, 1166);
+		}
+	};
 
-	this.actionRight = function () {
-		self.changeActionSelected(self.actionsNavigator.current(), self.actionsNavigator.next());
-	}
-
-	this.actionLeft = function () {
-		self.changeActionSelected(self.actionsNavigator.current(), self.actionsNavigator.previous());
-	}
-
-	this.changeActionSelected = function (oldAction, newAction) {
-		$(".contenedor." + oldAction).removeClass(oldAction + "-selected");
-		$(".contenedor." + newAction).addClass(newAction + "-selected");
-	}
-
-	this.resetGame = function() {
-		//console.log("resetGame");
+	this.startGame = function() {
+		self.onGameStarted();
 		self.resetLoadingTimer();
-		self.onResetGame();
-		self.audioManager.silence();
-		$("#avatarsmenu").hide();
-		self.hideMenu();
+		self.audioManager.playTheme();
+		self.hideLoading();
+		$("#video").show();
+		$("#video").css({"top": "0px"});
+	};
 
-		$("#ansiedad p").removeClass();
-		$("#felicidad p").removeClass();
-		$("#miedo p").removeClass();
-		$("#energia p").removeClass();
-		$("#hambre p").removeClass();
-		$("#dinero p").removeClass();
-
-		self.deselectActions();
-		self.showMainScreen();
+	this.changeAction = function(nivel) {
+		self.showMenu(nivel);
+		self.monitorWindow.clearActions();
+		$("#userdata_container").show();
+		$("#gameover").hide();
+		$("#startscreen").hide();
 	};
 
 	this.gamepadActionsMenu = function() {
@@ -186,70 +208,38 @@ function LifeWindow(audioManager) {
 		}
 	};
 
-	this.hideMenu = function() {
-		$(".actionsmenu-screen").hide();
-	};
-
-	this.startGame = function() {
-		self.onGameStarted();
-		self.resetLoadingTimer();
-		self.audioManager.playTheme();
-		self.hideLoading();
-		$("#video").show();
-		$("#video").css({"top": "0px"});
-	};
-
-	this.countDown;
-	this.helpIdx;
-
-	this.resetLoadingTimer = function() {
-		if (self.loadingTimer) {
-			clearTimeout(self.loadingTimer);
-		}
-		self.loadingTimer = false;
-		self.countDown = 31;
-		self.helpIdx = 0;
-	};
-
-	this.hideLoading = function() {
-		audioManager.stopLoading();
-		$(".loading-screen").hide();
-	};
-
-	this.showLoading = function(avatar) {
-		self.monitorWindow.play(avatar);
-		self.audioManager.avatarSelected(avatar);
-		$("#video").hide();	
-		$("#avatarsmenu").hide();
-		$(self.loadingIdIterator.next()).show();
-
-		self.gamepad.clearEventHandlers();
-		self.gamepad.leftShoulderRed = self.resetGame;
-		self.gamepad.bothShouldersYellow = self.startGame;
-
-		self.resetLoadingTimer();
-		self.updateLoadingCounter();
-	};
-
-	this.updateLoadingCounter = function() {
-		//console.log('updateLoadingCounter');
-		if (self.countDown % 10 == 0) {
-			$(".texto_vintage_loading_help").hide();
-			$("#help" + self.helpIdx).show();
-			self.helpIdx++;
+	this.actionSelected = function (action) {
+		var action = action || self.actionsNavigator.current();
+		if (typeof action === 'undefined') {
+			return;
 		}
 
-		self.countDown--;
-		$("#loadingCountdown").text(self.countDown);
-		if (self.countDown == 0) {
-			self.startGame();
-		} else {
-			self.loadingTimer = setTimeout(self.updateLoadingCounter, 1166);
-		}
-	};
+		$(".contenedor." + action).addClass(action + '-selected');
+		self.monitorWindow.action(action);
+		self.onActionTriggered(action);
+	}
 
 	this.setChangeActionWarningText = function(seconds) {
 		$("#cambiar_escena_button p.texto_cambiar_escena").text(seconds);
+	};
+
+	this.actionRight = function () {
+		self.changeActionSelected(self.actionsNavigator.current(), self.actionsNavigator.next());
+	}
+
+	this.actionLeft = function () {
+		self.changeActionSelected(self.actionsNavigator.current(), self.actionsNavigator.previous());
+	}
+
+	this.changeActionSelected = function (oldAction, newAction) {
+		$(".contenedor." + oldAction).removeClass(oldAction + "-selected");
+		$(".contenedor." + newAction).addClass(newAction + "-selected");
+	}
+
+	this.hideMenu = function() {
+		self.gamepad.clearEventHandlers();
+		$(".actionsmenu-screen").hide();
+	    self.deselectActions();
 	};
 
 	this.deselectActions = function() {
@@ -261,36 +251,6 @@ function LifeWindow(audioManager) {
 		$(".sexo").removeClass('sexo-selected');
 		$(".votar").removeClass('votar-selected');
 		$(".belleza").removeClass('belleza-selected');
-	};
-
-	this.changeAction = function(nivel) {
-		self.showMenu(nivel);
-		self.monitorWindow.clearActions();
-		$("#userdata_container").show();
-		$("#gameover").hide();
-		$("#startscreen").hide();
-	};
-
-	this.showWinnerMessage = function() {
-		self.monitorWindow.youWin();
-		audioManager.playYouWin();
-		$("#youWin").show();
-		setTimeout(self.showAnimatedSky, TIEMPO_GAME_OVER / 2);
-		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
-	};
-
-	this.showAnimatedSky = function() {
-		$("#video").hide();
-		$("#sky").show();
-		animate("#sky");
-	};
-
-	this.gameOver = function() {
-		self.monitorWindow.gameOver();
-		audioManager.playGameover();
-		$("#gameover").show();
-		self.gamepad.clearEventHandlers();
-		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
 	};
 
 	this.updateBars = function(ansiedad,felicidad,miedo,energia,hambre,dinero) {
@@ -369,6 +329,47 @@ function LifeWindow(audioManager) {
 
 	this.hideWarnings = function() {
 		$("#warningMessages").hide();
+	};
+
+	this.showWinnerMessage = function() {
+		self.monitorWindow.youWin();
+		audioManager.playYouWin();
+		$("#youWin").show();
+		setTimeout(self.showAnimatedSky, TIEMPO_GAME_OVER / 2);
+		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
+	};
+
+	this.showAnimatedSky = function() {
+		$("#video").hide();
+		$("#sky").show();
+		animate("#sky");
+	};
+
+	this.gameOver = function() {
+		self.monitorWindow.gameOver();
+		audioManager.playGameover();
+		$("#gameover").show();
+		self.gamepad.clearEventHandlers();
+		setTimeout(self.resetGame, TIEMPO_GAME_OVER);
+	};
+
+	this.resetGame = function() {
+		//console.log("resetGame");
+		self.resetLoadingTimer();
+		self.onResetGame();
+		self.audioManager.silence();
+		$("#avatarsmenu").hide();
+		self.hideMenu();
+
+		$("#ansiedad p").removeClass();
+		$("#felicidad p").removeClass();
+		$("#miedo p").removeClass();
+		$("#energia p").removeClass();
+		$("#hambre p").removeClass();
+		$("#dinero p").removeClass();
+
+		self.deselectActions();
+		self.showMainScreen();
 	};
 
 	this.onGameStarted = function() {console.log("Dummy onGameStarted")};
