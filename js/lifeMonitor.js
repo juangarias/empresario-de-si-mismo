@@ -41,7 +41,7 @@ function LifeMonitor(minValue, maxValue, initValue) {
 	this.calculateIsDead = function() {
   		return this.ansiedad >= this.maxValue || this.miedo >= this.maxValue || 
           this.felicidad <= this.minValue || this.energia <= this.minValue || 
-          this.hambre <= this.minValue || this.dinero <= this.minValue;
+          this.hambre >= this.maxValue || this.dinero <= this.minValue;
 	}
 
 	this.getAnsiedad = function() {

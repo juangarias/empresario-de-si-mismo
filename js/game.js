@@ -10,14 +10,14 @@ var accionesElegidas = [];
 
 //ansiedadNew, felicidadNew, miedoNew, energiaNew, hambreNew, dineroNew
 var effects = {};
-effects["comer"] = [-2,3,-1,4,-4,-2];
-effects["dormir"] = [-3,2,-1,3,3,-1];
-effects["trabajar"] = [2,-2,1,-2,3,4];
-effects["ocio"] = [-1,3,-1,1,2,-2];
-effects["entrenar"] = [-2,1,-1,-3,3,-2];
+effects["comer"] = [-2,3,-1,4,-5,-2];
+effects["dormir"] = [-3,2,-1,3,1,-1];
+effects["trabajar"] = [2,-2,1,-2,2,4];
+effects["ocio"] = [-1,3,-1,1,1,-2];
+effects["entrenar"] = [-2,1,-1,-3,2,-2];
 effects["sexo"] = [-2,3,-1,-2,3,-1];
-effects["votar"] = [2,1,2,-1,1,0];
-effects["belleza"] = [-1,2,1,0,1,-4];
+effects["votar"] = [2,1,2,-1,0,0];
+effects["belleza"] = [-1,2,1,0,0,-4];
 
 $(document).ready(function() {
   audioManager = new AudioManager();
@@ -37,7 +37,7 @@ var onGameStarted = function() {
   accionesElegidas = [];
 
   startGameTimer();
-  startChangeActionTimer();
+  setTimeout(startChangeActionTimer, 2000);
 };
 
 var onActionTriggered = function(action) {
@@ -71,6 +71,7 @@ var startGameTimer = function() {
 };
 
 var startChangeActionTimer = function() {
+  console.log("startChangeActionTimer");
   lifeWindow.changeAction(nivel);
   tiempoCambioAccion = TIEMPO_CAMBIO_ACCION
   lifeWindow.setChangeActionWarningText(formatSeconds(tiempoCambioAccion));

@@ -116,7 +116,7 @@ function AudioManager() {
 	};
 
 	this.playActionSound = function() {
-		console.log("playActionSound");
+		//console.log("playActionSound");
 		setTimeout(self.playNextActionPhrase, 2000);
 	};
 

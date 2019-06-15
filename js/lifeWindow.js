@@ -43,6 +43,12 @@ function LifeWindow(audioManager) {
 		$("#startscreen").show();
 	};
 
+	this.gamepadShowMainScreen = function () {
+		self.gamepad.clearEventHandlers();
+		self.gamepad.start = self.startButtonClicked;
+		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.startButtonClicked;
+	};
+
 	this.prepareSettings = function() {
 		$("#mute").attr('checked', MUTE);
 		$("#mute").change(function() { 
@@ -61,12 +67,6 @@ function LifeWindow(audioManager) {
 		}
 	};
 
-	this.gamepadShowMainScreen = function () {
-		self.gamepad.clearEventHandlers();
-		self.gamepad.start = self.startButtonClicked;
-		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.startButtonClicked;
-	}
-
 	this.startButtonClicked = function() {
 		audioManager.stopWaitPlayer();
 		$("#startscreen").hide();
@@ -79,25 +79,25 @@ function LifeWindow(audioManager) {
 		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.avatarClicked;
 		self.gamepad.left = self.avatarLeft;
 		self.gamepad.right = self.avatarRight;
-	}
+	};
 
 	this.avatarLeft = function () {  
 		self.changeAvatarSelected(self.avatarNav.current(), self.avatarNav.previous());
-	}
+	};
 
 	this.avatarRight = function () {
 		self.changeAvatarSelected(self.avatarNav.current(), self.avatarNav.next());
-	}
+	};
 
 	this.changeAvatarSelected = function (oldAvatar, newAvatar) {
 		$("#" + oldAvatar).removeClass(oldAvatar + "-selected");
 		$("#" + newAvatar).addClass(newAvatar + "-selected");
-	}
+	};
 
 	this.avatarClicked = function (avatar) {
 		var avatar = avatar || self.avatarNav.current();
 		self.showLoading(avatar);
-	}
+	};
 
 	this.showLoading = function(avatar) {
 		self.monitorWindow.play(avatar);
@@ -128,7 +128,11 @@ function LifeWindow(audioManager) {
 
 	this.hideLoading = function() {
 		audioManager.stopLoading();
+		self.resetLoadingTimer();
 		$(".loading-screen").hide();
+		$("#help0").hide();
+		$("#help1").hide();
+		$("#help2").hide();
 	};
 
 	this.updateLoadingCounter = function() {
@@ -150,7 +154,6 @@ function LifeWindow(audioManager) {
 
 	this.startGame = function() {
 		self.onGameStarted();
-		self.resetLoadingTimer();
 		self.audioManager.playTheme();
 		self.hideLoading();
 		$("#video").show();
@@ -163,14 +166,6 @@ function LifeWindow(audioManager) {
 		$("#userdata_container").show();
 		$("#gameover").hide();
 		$("#startscreen").hide();
-	};
-
-	this.gamepadActionsMenu = function() {
-		self.gamepad.clearEventHandlers();
-		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.actionSelected;
-		self.gamepad.left = self.actionLeft;
-		self.gamepad.right = self.actionRight;
-		self.gamepad.leftShoulderRed = self.resetGame;
 	};
 
 	this.showMenu = function(nivel) {
@@ -206,6 +201,14 @@ function LifeWindow(audioManager) {
 			self.actionsNavigator = new ArrayNavigator(["comer", "dormir", "trabajar", "ocio", "entrenar", "sexo", "votar", "belleza"]);
 			$("#actionsmenu5").show();
 		}
+	};
+
+	this.gamepadActionsMenu = function() {
+		self.gamepad.clearEventHandlers();
+		self.gamepad.red = self.gamepad.blue = self.gamepad.yellow = self.gamepad.green = self.actionSelected;
+		self.gamepad.left = self.actionLeft;
+		self.gamepad.right = self.actionRight;
+		self.gamepad.leftShoulderRed = self.resetGame;
 	};
 
 	this.actionSelected = function (action) {
@@ -255,12 +258,12 @@ function LifeWindow(audioManager) {
 
 	this.updateBars = function(ansiedad,felicidad,miedo,energia,hambre,dinero) {
 		self.energyHighWarningCount = self.energyLowWarningCount = 0;
-		self.updateStyleLessBetter(ansiedad, "#ansiedad p");
-		self.updateStyleMoreBetter(felicidad, "#felicidad p");
-		self.updateStyleLessBetter(miedo, "#value p");
-		self.updateStyleMoreBetter(energia, "#energia p");
-		self.updateStyleMoreBetter(hambre, "#hambre p");
-		self.updateStyleMoreBetter(dinero, "#dinero p");
+		self.updateStyleLessBetter(ansiedad, "#ansiedad");
+		self.updateStyleMoreBetter(felicidad, "#felicidad");
+		self.updateStyleLessBetter(miedo, "#value");
+		self.updateStyleMoreBetter(energia, "#energia");
+		self.updateStyleLessBetter(hambre, "#hambre");
+		self.updateStyleMoreBetter(dinero, "#dinero");
 
 		$("#ansiedad").width(ansiedad + "px");
 		$("#felicidad").width(felicidad + "px");
@@ -270,29 +273,43 @@ function LifeWindow(audioManager) {
 		$("#dinero").width(dinero + "px");
 	};
 
-	this.updateStyleMoreBetter = function(value, idBar) {
-		$(idBar).removeClass();
+	this.updateStyleMoreBetter = function(value, idBarDiv) {
+		var idBarP = idBarDiv + " p";
+		$(idBarDiv).removeClass();
+		$(idBarP).removeClass();
 		if (value <= ENERGY_BAR_MIN) {
-			$(idBar).addClass("text_danger_style");
+			$(idBarDiv).addClass("energy_bar_danger");
+			$(idBarP).addClass("text_danger_style");
 		} else if (value < ENERGY_BAR_WARN_LOW_CRITICAL) {
-			$(idBar).addClass("text_critical_style");
+			$(idBarDiv).addClass("energy_bar_warning");
+			$(idBarP).addClass("text_critical_style");
 			self.energyLowWarningCount++;
 		} else if (value < ENERGY_BAR_WARN_LOW) {
-			$(idBar).addClass("text_warning_style");
+			$(idBarDiv).addClass("energy_bar_warning");
+			$(idBarP).addClass("text_warning_style");
 			self.energyLowWarningCount++;
+		} else {
+			$(idBarDiv).addClass("energy_bar");
 		}
 	};
 
-	this.updateStyleLessBetter = function(value, idBar) {
-		$(idBar).removeClass();
+	this.updateStyleLessBetter = function(value, idBarDiv) {
+		var idBarP = idBarDiv + " p";
+		$(idBarDiv).removeClass();
+		$(idBarP).removeClass();
 		if (value >= ENERGY_BAR_MAX) {
-			$(idBar).addClass("text_danger_style");
+			$(idBarDiv).addClass("energy_bar_danger");
+			$(idBarP).addClass("text_danger_style");
 		} else if (value > ENERGY_BAR_WARN_HIGH_CRITICAL) {
-			$(idBar).addClass("text_critical_style");
+			$(idBarDiv).addClass("energy_bar_warning");
+			$(idBarP).addClass("text_critical_style");
 			self.energyHighWarningCount++;
 		} else if (value > ENERGY_BAR_WARN_HIGH) {
-			$(idBar).addClass("text_warning_style");
+			$(idBarDiv).addClass("energy_bar_warning");
+			$(idBarP).addClass("text_critical_style");
 			self.energyHighWarningCount++;
+		} else {
+			$(idBarDiv).addClass("energy_bar");
 		}
 	};
 
@@ -332,6 +349,7 @@ function LifeWindow(audioManager) {
 	};
 
 	this.showWinnerMessage = function() {
+		self.hideMenu();
 		self.monitorWindow.youWin();
 		audioManager.playYouWin();
 		$("#youWin").show();
@@ -346,6 +364,7 @@ function LifeWindow(audioManager) {
 	};
 
 	this.gameOver = function() {
+		self.hideMenu();
 		self.monitorWindow.gameOver();
 		audioManager.playGameover();
 		$("#gameover").show();

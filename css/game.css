@@ -124,11 +124,22 @@ body {
 }
 
 #ansiedad,#felicidad,#miedo,#energia,#hambre,#dinero{
-  background-image:url("../assets/energy_bar.png");
   position: absolute;
   width:35px;
   height: 11px;
   background-repeat: no-repeat;
+}
+
+.energy_bar_danger {
+  background-image:url("../assets/energy_bar_red.png");
+}
+
+.energy_bar_warning {
+  background-image:url("../assets/energy_bar_yellow.png");
+}
+
+.energy_bar {
+  background-image:url("../assets/energy_bar_green.png");
 }
 
 #ansiedad{
@@ -208,7 +219,7 @@ body {
 }
 
 .text_critical_style{
-  color: orange;
+  color: yellow;
   animation: blinkfast 1s linear infinite;
 }
 
@@ -237,11 +248,11 @@ body {
 
 }
 #tiempo p.title{
-font-size: 0.9em;
-color: #cdd2b0;
-position: relative;
-top: 11px;
-left: -16px;
+  font-size: 0.9em;
+  color: #cdd2b0;
+  position: relative;
+  top: 11px;
+  left: -16px;
 }
 /***** FIN USER DATA *****/
 
@@ -276,6 +287,7 @@ div#actionsmenu5{
 }
 
 .warning_messages {
+  background-color: rgba(0,0,0,0.9);
   border-radius: 8px;
   border: 6px solid #CDD2B4;
   padding: 10px;
